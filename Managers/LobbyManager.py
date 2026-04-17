@@ -255,8 +255,8 @@ class LobbyManager:
         if not ordered_members:
             ordered_members = all_members
 
-        target_width = 383
-        target_height = 280
+        target_width = 640
+        target_height = 480
         y = 0
         placed = 0
 
