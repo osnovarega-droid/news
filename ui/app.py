@@ -199,9 +199,9 @@ class App(customtkinter.CTk):
         self.splash_progress = None
         self._startup_services_initializer = startup_services_initializer
         
-        self.geometry("1920x900")
-        self.minsize(1920, 900)
-        self.maxsize(1920, 900)
+        self.geometry("1700x930")
+        self.minsize(1700, 930)
+        self.maxsize(1700, 930)
         self.configure(fg_color=BG_MAIN)
         self.withdraw()
 
@@ -867,12 +867,7 @@ class App(customtkinter.CTk):
         header.grid(row=0, column=0, padx=12, pady=(10, 8), sticky="ew")
         header.grid_columnconfigure(1, weight=1)
 
-        customtkinter.CTkLabel(
-            header,
-            text="Goose Panel — New Layout (1920x900)",
-            text_color=TXT_MAIN,
-            font=customtkinter.CTkFont(size=24, weight="bold"),
-        ).grid(row=0, column=0, sticky="w")
+
 
         self.accounts_info = customtkinter.CTkLabel(
             header,
@@ -901,8 +896,8 @@ class App(customtkinter.CTk):
         windows_panel.grid_rowconfigure(0, weight=0)
         grid_wrap = customtkinter.CTkFrame(
             windows_panel,
-            width=1280,
-            height=960,
+            width=1281,
+            height=961,
             corner_radius=8,
             fg_color=BG_CARD_ALT,
             border_width=2,
@@ -925,7 +920,7 @@ class App(customtkinter.CTk):
                 border_width=2,
                 border_color=ACCENT_GREEN,
             )
-            slot.grid(row=r, column=c, padx=0, pady=0, sticky="nw")
+            slot.grid(row=r, column=c, padx=(0 if c == 0 else 1, 0), pady=(0 if r == 0 else 1, 0), sticky="nw")
             slot.grid_propagate(False)
             self.ui_grid_slots.append(slot)
 
@@ -3753,7 +3748,7 @@ class App(customtkinter.CTk):
                 return
             x = int(parts[0].strip())
             y = int(parts[1].strip())
-            self.geometry(f"1100x600+{x}+{y}")
+            self.geometry(f"1700x930+{x}+{y}")
         except Exception:
             pass
 
