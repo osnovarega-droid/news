@@ -888,37 +888,47 @@ class App(customtkinter.CTk):
         body.grid_columnconfigure(1, weight=1, minsize=560)
         body.grid_rowconfigure(0, weight=1)
 
-        # Left area: 2x2 CS window map (640x480 each).
-        windows_panel = customtkinter.CTkFrame(body, fg_color=BG_CARD, corner_radius=10, border_width=1, border_color=BG_BORDER)
+        # Left area: strict 2x2 CS window dock (640x480 each).
+        windows_panel = customtkinter.CTkFrame(
+            body,
+            fg_color=BG_CARD,
+            corner_radius=10,
+            border_width=2,
+            border_color=ACCENT_GREEN,
+        )
         windows_panel.grid(row=0, column=0, padx=(0, 10), sticky="nsew")
-        windows_panel.grid_columnconfigure((0, 1), weight=1)
-        windows_panel.grid_rowconfigure((0, 1), weight=1)
-        customtkinter.CTkLabel(
+        windows_panel.grid_columnconfigure(0, weight=0)
+        windows_panel.grid_rowconfigure(0, weight=0)
+        grid_wrap = customtkinter.CTkFrame(
             windows_panel,
-            text="CS Grid 2x2 • target per window: 640x480",
-            text_color=TXT_SOFT,
-            font=customtkinter.CTkFont(size=12, weight="bold"),
-        ).grid(row=0, column=0, columnspan=2, padx=10, pady=(8, 6), sticky="w")
-
-       
-        grid_wrap = customtkinter.CTkFrame(windows_panel, fg_color="transparent")
-        grid_wrap.grid(row=1, column=0, columnspan=2, padx=10, pady=(0, 10), sticky="nsew")
-        grid_wrap.grid_columnconfigure((0, 1), weight=1)
-        grid_wrap.grid_rowconfigure((0, 1), weight=1)
-
+            width=1280,
+            height=960,
+            corner_radius=8,
+            fg_color=BG_CARD_ALT,
+            border_width=2,
+            border_color=ACCENT_GREEN,
+        )
+        grid_wrap.grid(row=0, column=0, padx=8, pady=8, sticky="nw")
+        grid_wrap.grid_propagate(False)
+        grid_wrap.grid_columnconfigure((0, 1), weight=0)
+        grid_wrap.grid_rowconfigure((0, 1), weight=0)
+        
         self.ui_grid_slots = []
         for i in range(4):
             r, c = divmod(i, 2)
-            slot = customtkinter.CTkFrame(grid_wrap, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
-            slot.grid(row=r, column=c, padx=6, pady=6, sticky="nsew")
+            slot = customtkinter.CTkFrame(
+                grid_wrap,
+                width=640,
+                height=480,
+                fg_color=BG_CARD_ALT,
+                corner_radius=4,
+                border_width=2,
+                border_color=ACCENT_GREEN,
+            )
+            slot.grid(row=r, column=c, padx=0, pady=0, sticky="nw")
+            slot.grid_propagate(False)
             self.ui_grid_slots.append(slot)
-            customtkinter.CTkLabel(
-                slot,
-                text=f"Window {i + 1}\n640x480",
-                justify="center",
-                text_color=TXT_MAIN,
-                font=customtkinter.CTkFont(size=16, weight="bold"),
-            ).place(relx=0.5, rely=0.5, anchor="center")
+
 
         # Anchor for actual cs2.exe window moving.
         self.ui_grid_anchor = grid_wrap
@@ -937,7 +947,7 @@ class App(customtkinter.CTk):
         customtkinter.CTkButton(quick, text="Select all", command=self._action_select_all_toggle, fg_color=BG_CARD_ALT, hover_color=BG_BORDER, height=34).grid(row=0, column=1, padx=4, pady=4, sticky="ew")
         customtkinter.CTkButton(quick, text="Launch selected", command=self._action_start_selected, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, height=34).grid(row=1, column=0, padx=4, pady=4, sticky="ew")
         customtkinter.CTkButton(quick, text="Kill selected", command=self._action_kill_selected, fg_color=ACCENT_RED, hover_color="#962c38", height=34).grid(row=1, column=1, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(quick, text="Move all CS windows (2x2)", command=self._action_move_all_cs_windows, fg_color=ACCENT_GREEN, hover_color="#177844", height=34).grid(row=2, column=0, columnspan=2, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(quick, text="Move all CS windows", command=self._action_move_all_cs_windows, fg_color=ACCENT_GREEN, hover_color="#177844", height=34).grid(row=2, column=0, columnspan=2, padx=4, pady=4, sticky="ew")
 
         lobby = customtkinter.CTkFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
         lobby.grid(row=1, column=0, padx=10, pady=6, sticky="ew")
