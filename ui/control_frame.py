@@ -22,6 +22,9 @@ class ControlFrame(customtkinter.CTkFrame):
         self.logManager = LogManager()
         self._auto_move_lock = threading.Lock()
         self._auto_move_active = False
+        self._docked_windows = []
+        self._dock_window_size = (640, 480)
+        self._dock_grid_size = (2, 2)
         self.accounts_list_frame = None
 
         self.grid(row=1, column=3, padx=(20, 20), pady=(20, 0), sticky="nsew")
@@ -81,8 +84,7 @@ class ControlFrame(customtkinter.CTkFrame):
         except Exception:
             pass
 
-        window_width = 640
-        window_height = 480
+        window_width, window_height = self._dock_window_size
         spacing = 0
 
         # 1) Порядок строго из аккаунтов в UI
@@ -153,36 +155,25 @@ class ControlFrame(customtkinter.CTkFrame):
             return
 
         # 5) Ставим окна в сетку 2x2 (640x480) внутри области UI слева.
-        max_columns = 2
-        max_rows = 2
+        max_columns, max_rows = self._dock_grid_size
         max_slots = max_columns * max_rows
 
         app_window = self.winfo_toplevel()
-        base_x = 0
-        base_y = 0
-        try:
-            app_window.update_idletasks()
-            anchor = getattr(app_window, "ui_grid_anchor", None)
-            if anchor and anchor.winfo_exists():
-                base_x = anchor.winfo_rootx() + 6
-                base_y = anchor.winfo_rooty() + 6
-            else:
-                base_x = app_window.winfo_rootx() + 18
-                base_y = app_window.winfo_rooty() + 70
-        except Exception:
-            pass
+        slots = self._get_grid_slots(app_window)
+        if not slots:
+            print("❌ Не удалось получить координаты слотов 2x2 в панели")
+            return
 
         placed = 0
+        self._docked_windows = []
         for idx, (login, pid, hwnd) in enumerate(ordered_windows[:max_slots]):
-            col = idx % max_columns
-            row = idx // max_columns
-            x = base_x + col * (window_width + spacing)
-            y = base_y + row * (window_height + spacing)
+            row, col, x, y = slots[idx]
             try:
                 win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
                 win32gui.MoveWindow(hwnd, x, y, window_width, window_height, True)
                 print(f"📍 {idx + 1}. {login} (PID {pid}) -> row={row + 1}, col={col + 1}, pos=({x},{y})")
                 placed += 1
+                self._docked_windows.append((login, pid, hwnd))
             except Exception as e:
                 print(f"⚠️ Не удалось переместить {login}: {e}")
 
@@ -190,6 +181,84 @@ class ControlFrame(customtkinter.CTkFrame):
 
         if self.accounts_list_frame:
             self.accounts_list_frame.set_green_for_launched_cs2(active_cs2_pids)
+
+    def _get_grid_slots(self, app_window):
+        slots = []
+        width, height = self._dock_window_size
+        spacing = 0
+        max_columns, max_rows = self._dock_grid_size
+        try:
+            app_window.update_idletasks()
+
+            ui_slots = getattr(app_window, "ui_grid_slots", None) or []
+            for idx, slot in enumerate(ui_slots[: max_columns * max_rows]):
+                if not slot.winfo_exists():
+                    continue
+                row = idx // max_columns
+                col = idx % max_columns
+                x = slot.winfo_rootx() + 1
+                y = slot.winfo_rooty() + 1
+                slots.append((row, col, x, y))
+
+            if len(slots) >= max_columns * max_rows:
+                return slots
+
+            anchor = getattr(app_window, "ui_grid_anchor", None)
+            if anchor and anchor.winfo_exists():
+                base_x = anchor.winfo_rootx() + 6
+                base_y = anchor.winfo_rooty() + 6
+            else:
+                base_x = app_window.winfo_rootx() + 18
+                base_y = app_window.winfo_rooty() + 70
+
+            slots = []
+            for idx in range(max_columns * max_rows):
+                row = idx // max_columns
+                col = idx % max_columns
+                x = base_x + col * (width + spacing)
+                y = base_y + row * (height + spacing)
+                slots.append((row, col, x, y))
+        except Exception:
+            return []
+        return slots
+
+    def sync_docked_windows_with_panel(self):
+        if not self._docked_windows:
+            return
+
+        app_window = self.winfo_toplevel()
+        slots = self._get_grid_slots(app_window)
+        if not slots:
+            return
+
+        width, height = self._dock_window_size
+        for idx, (_, _, hwnd) in enumerate(self._docked_windows):
+            if idx >= len(slots):
+                break
+            if not hwnd or not win32gui.IsWindow(hwnd):
+                continue
+            _, _, x, y = slots[idx]
+            try:
+                if win32gui.IsIconic(hwnd):
+                    continue
+                win32gui.MoveWindow(hwnd, x, y, width, height, True)
+            except Exception:
+                continue
+
+    def set_docked_windows_minimized(self, minimized):
+        if not self._docked_windows:
+            return
+        show_cmd = win32con.SW_MINIMIZE if minimized else win32con.SW_RESTORE
+        for _, _, hwnd in self._docked_windows:
+            if not hwnd or not win32gui.IsWindow(hwnd):
+                continue
+            try:
+                win32gui.ShowWindow(hwnd, show_cmd)
+            except Exception:
+                continue
+
+        if not minimized:
+            self.sync_docked_windows_with_panel()
 
     def check_cs2_and_update_colors(self):
         launched_pids = self._get_active_cs2_pids()
