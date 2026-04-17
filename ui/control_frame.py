@@ -25,6 +25,7 @@ class ControlFrame(customtkinter.CTkFrame):
         self._docked_windows = []
         self._dock_window_size = (640, 480)
         self._dock_grid_size = (2, 2)
+        self._dock_slot_padding = 4
         self.accounts_list_frame = None
 
         self.grid(row=1, column=3, padx=(20, 20), pady=(20, 0), sticky="nsew")
@@ -84,7 +85,7 @@ class ControlFrame(customtkinter.CTkFrame):
         except Exception:
             pass
 
-        window_width, window_height = self._dock_window_size
+
 
         # 1) Порядок строго из аккаунтов в UI
         accounts_order = [acc.login for acc in AccountManager().accounts]
@@ -166,7 +167,7 @@ class ControlFrame(customtkinter.CTkFrame):
         placed = 0
         self._docked_windows = []
         for idx, (login, pid, hwnd) in enumerate(ordered_windows[:max_slots]):
-            row, col, x, y = slots[idx]
+            row, col, x, y, window_width, window_height = slots[idx]
             try:
                 win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
                 win32gui.MoveWindow(hwnd, x, y, window_width, window_height, True)
@@ -182,7 +183,7 @@ class ControlFrame(customtkinter.CTkFrame):
         if self.accounts_list_frame:
             self.accounts_list_frame.set_green_for_launched_cs2(active_cs2_pids)
 
-    def _get_grid_slots(self, app_window): 
+    def _get_grid_slots(self, app_window):
         slots = [] 
         width, height = self._dock_window_size 
         spacing = 1
@@ -196,9 +197,12 @@ class ControlFrame(customtkinter.CTkFrame):
                     continue 
                 row = idx // max_columns 
                 col = idx % max_columns 
-                x = slot.winfo_rootx()
-                y = slot.winfo_rooty()
-                slots.append((row, col, x, y)) 
+                pad = self._dock_slot_padding
+                x = slot.winfo_rootx() + pad
+                y = slot.winfo_rooty() + pad
+                slot_width = max(200, slot.winfo_width() - (pad * 2))
+                slot_height = max(120, slot.winfo_height() - (pad * 2))
+                slots.append((row, col, x, y, slot_width, slot_height)) 
 
             if len(slots) >= max_columns * max_rows:
                 return slots
@@ -217,7 +221,7 @@ class ControlFrame(customtkinter.CTkFrame):
                 col = idx % max_columns
                 x = base_x + col * (width + spacing)
                 y = base_y + row * (height + spacing)
-                slots.append((row, col, x, y))
+                slots.append((row, col, x, y, width, height))
         except Exception:
             return []
         return slots
@@ -243,6 +247,9 @@ class ControlFrame(customtkinter.CTkFrame):
             except Exception:
                 continue
 
+    def raise_docked_windows(self):
+        self._raise_docked_windows_once()
+
     def sync_docked_windows_with_panel(self):
         if not self._docked_windows:
             return
@@ -252,13 +259,12 @@ class ControlFrame(customtkinter.CTkFrame):
         if not slots:
             return
 
-        width, height = self._dock_window_size
         for idx, (_, _, hwnd) in enumerate(self._docked_windows):
             if idx >= len(slots):
                 break
             if not hwnd or not win32gui.IsWindow(hwnd):
                 continue
-            _, _, x, y = slots[idx]
+            _, _, x, y, width, height = slots[idx]
             try:
                 if win32gui.IsIconic(hwnd):
                     continue
