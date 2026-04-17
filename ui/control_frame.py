@@ -25,7 +25,7 @@ class ControlFrame(customtkinter.CTkFrame):
         self._docked_windows = []
         self._dock_window_size = (640, 480)
         self._dock_grid_size = (2, 2)
-        self._dock_slot_padding = 0
+        self._dock_slot_padding = 1
         self.accounts_list_frame = None
 
         self.grid(row=1, column=3, padx=(20, 20), pady=(20, 0), sticky="nsew")
@@ -249,6 +249,27 @@ class ControlFrame(customtkinter.CTkFrame):
 
     def raise_docked_windows(self):
         self._raise_docked_windows_once()
+
+    def set_docked_windows_topmost(self, topmost):
+        if not self._docked_windows:
+            return
+
+        insert_after = win32con.HWND_TOPMOST if topmost else win32con.HWND_NOTOPMOST
+        for _, _, hwnd in self._docked_windows:
+            if not hwnd or not win32gui.IsWindow(hwnd):
+                continue
+            try:
+                win32gui.SetWindowPos(
+                    hwnd,
+                    insert_after,
+                    0,
+                    0,
+                    0,
+                    0,
+                    win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_NOACTIVATE,
+                )
+            except Exception:
+                continue
 
     def sync_docked_windows_with_panel(self):
         if not self._docked_windows:
