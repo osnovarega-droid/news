@@ -199,9 +199,9 @@ class App(customtkinter.CTk):
         self.splash_progress = None
         self._startup_services_initializer = startup_services_initializer
         
-        self.geometry("1700x930")
-        self.minsize(1700, 930)
-        self.maxsize(1700, 930)
+        self.geometry("1750x1080")
+        self.minsize(1750, 1080)
+        self.maxsize(1750, 1080)
         self.configure(fg_color=BG_MAIN)
         self.withdraw()
 
@@ -776,11 +776,10 @@ class App(customtkinter.CTk):
         self.content = customtkinter.CTkFrame(
             self,
             fg_color=BG_PANEL,
-            corner_radius=12,
-            border_width=1,
-            border_color=BG_BORDER,
+            corner_radius=0,
+            border_width=0,
         )
-        self.content.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+        self.content.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
         self.content.grid_columnconfigure(0, weight=1)
         self.content.grid_rowconfigure(0, weight=1)
 
@@ -867,7 +866,7 @@ class App(customtkinter.CTk):
         frame.grid_rowconfigure(1, weight=1)
 
         header = customtkinter.CTkFrame(frame, fg_color="transparent")
-        header.grid(row=0, column=0, padx=12, pady=(10, 8), sticky="ew")
+        header.grid(row=0, column=0, padx=0, pady=(0, 6), sticky="ew")
         header.grid_columnconfigure(1, weight=1)
 
 
@@ -881,32 +880,30 @@ class App(customtkinter.CTk):
         self.accounts_info.grid(row=0, column=1, sticky="e")
 
         body = customtkinter.CTkFrame(frame, fg_color="transparent")
-        body.grid(row=1, column=0, padx=12, pady=(0, 10), sticky="nsew")
-        body.grid_columnconfigure(0, weight=0, minsize=1290)
-        body.grid_columnconfigure(1, weight=1, minsize=560)
+        body.grid(row=1, column=0, padx=0, pady=(0, 0), sticky="nsew")
+        body.grid_columnconfigure(0, weight=0, minsize=1292)
+        body.grid_columnconfigure(1, weight=1, minsize=430)
         body.grid_rowconfigure(0, weight=1)
 
         # Left area: strict 2x2 CS window dock (640x480 each).
         windows_panel = customtkinter.CTkFrame(
             body,
             fg_color=BG_CARD,
-            corner_radius=10,
-            border_width=2,
-            border_color=ACCENT_GREEN,
+            corner_radius=0,
+            border_width=0,
         )
-        windows_panel.grid(row=0, column=0, padx=(0, 10), sticky="nsew")
+        windows_panel.grid(row=0, column=0, padx=(0, 8), sticky="nw")
         windows_panel.grid_columnconfigure(0, weight=0)
         windows_panel.grid_rowconfigure(0, weight=0)
         grid_wrap = customtkinter.CTkFrame(
             windows_panel,
             width=1292,
             height=972,
-            corner_radius=8,
+            corner_radius=0,
             fg_color=BG_CARD_ALT,
-            border_width=2,
-            border_color=ACCENT_GREEN,
+            border_width=0,
         )
-        grid_wrap.grid(row=0, column=0, padx=8, pady=8, sticky="nw")
+        grid_wrap.grid(row=0, column=0, padx=0, pady=0, sticky="nw")
         grid_wrap.grid_propagate(False)
         grid_wrap.grid_columnconfigure((0, 1), weight=0)
         grid_wrap.grid_rowconfigure((0, 1), weight=0)
@@ -919,11 +916,11 @@ class App(customtkinter.CTk):
                 width=642,
                 height=482,
                 fg_color=BG_CARD_ALT,
-                corner_radius=4,
+                corner_radius=0,
                 border_width=2,
                 border_color=ACCENT_GREEN,
             )
-            slot.grid(row=r, column=c, padx=3, pady=3, sticky="nw")
+            slot.grid(row=r, column=c, padx=1, pady=1, sticky="nw")
             slot.grid_propagate(False)
             self.ui_grid_slots.append(slot)
 
@@ -931,7 +928,7 @@ class App(customtkinter.CTk):
         # Anchor for actual cs2.exe window moving.
         self.ui_grid_anchor = grid_wrap
         # Right area: all actions + account list + logs.
-        controls_panel = customtkinter.CTkFrame(body, fg_color=BG_CARD, corner_radius=10, border_width=1, border_color=BG_BORDER)
+        controls_panel = customtkinter.CTkFrame(body, fg_color=BG_CARD, corner_radius=0, border_width=0)
         controls_panel.grid(row=0, column=1, sticky="nsew")
         controls_panel.grid_columnconfigure(0, weight=1)
         controls_panel.grid_rowconfigure(3, weight=2)
@@ -941,11 +938,21 @@ class App(customtkinter.CTk):
         quick.grid(row=0, column=0, padx=10, pady=(10, 6), sticky="ew")
         for i in range(2):
             quick.grid_columnconfigure(i, weight=1)
-        customtkinter.CTkButton(quick, text="Select 4 accs", command=self._action_select_first_4, fg_color=ACCENT_PURPLE, hover_color="#313866", height=36).grid(row=0, column=0, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(quick, text="Select all", command=self._action_select_all_toggle, fg_color=BG_CARD_ALT, hover_color=BG_BORDER, height=36).grid(row=0, column=1, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(quick, text="Launch selected", command=self._action_start_selected, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, height=36).grid(row=1, column=0, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(quick, text="Kill selected", command=self._action_kill_selected, fg_color=ACCENT_RED, hover_color="#962c38", height=36).grid(row=1, column=1, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(quick, text="Move all CS windows", command=self._action_move_all_cs_windows, fg_color=ACCENT_GREEN, hover_color="#177844", height=36).grid(row=2, column=0, columnspan=2, padx=4, pady=4, sticky="ew")
+        button_style = {
+            "height": 36,
+            "corner_radius": 6,
+            "border_width": 1,
+            "border_color": "#3a4566",
+            "font": customtkinter.CTkFont(size=12, weight="bold"),
+        }
+        customtkinter.CTkButton(quick, text="Select 4 accs", command=self._action_select_first_4, fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=0, padx=3, pady=3, sticky="ew")
+        customtkinter.CTkButton(quick, text="Select all", command=self._action_select_all_toggle, fg_color=BG_CARD_ALT, hover_color=BG_BORDER, **button_style).grid(row=0, column=1, padx=3, pady=3, sticky="ew")
+        customtkinter.CTkButton(quick, text="Launch selected", command=self._action_start_selected, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, **button_style).grid(row=1, column=0, padx=3, pady=3, sticky="ew")
+        customtkinter.CTkButton(quick, text="Kill selected", command=self._action_kill_selected, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=1, column=1, padx=3, pady=3, sticky="ew")
+        customtkinter.CTkButton(quick, text="Move all CS windows", command=self._action_move_all_cs_windows, fg_color=ACCENT_GREEN, hover_color="#177844", **button_style).grid(row=2, column=0, columnspan=2, padx=3, pady=3, sticky="ew")
+
+        lobby = customtkinter.CTkFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=6, border_width=0)
+        lobby.grid(row=1, column=0, padx=8, pady=4, sticky="ew")
 
         lobby = customtkinter.CTkFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
         lobby.grid(row=1, column=0, padx=10, pady=6, sticky="ew")
@@ -958,11 +965,11 @@ class App(customtkinter.CTk):
             ("Shuffle Lobbies", self._action_shuffle_lobbies, BG_CARD),
         ]
         for idx, (text, cmd, color) in enumerate(lobby_buttons):
-            btn = customtkinter.CTkButton(lobby, text=text, command=cmd, fg_color=color, hover_color=BG_BORDER, height=34)
-            btn.grid(row=idx, column=0, padx=6, pady=4, sticky="ew")
+            btn = customtkinter.CTkButton(lobby, text=text, command=cmd, fg_color=color, hover_color=BG_BORDER, **button_style)
+            btn.grid(row=idx, column=0, padx=4, pady=3, sticky="ew")
             self.lobby_buttons[text] = btn
-        tools = customtkinter.CTkFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
-        tools.grid(row=2, column=0, padx=10, pady=6, sticky="ew")
+        tools = customtkinter.CTkFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=6, border_width=0)
+        tools.grid(row=2, column=0, padx=8, pady=4, sticky="ew")
         tools.grid_columnconfigure(0, weight=1)
         tool_buttons = [
             ("Launch steam", self._action_launch_steam_selected, ACCENT_BLUE),
@@ -973,11 +980,11 @@ class App(customtkinter.CTk):
             ("Send trade", self._action_send_trade_selected, ACCENT_GREEN),
         ]
         for idx, (text, cmd, color) in enumerate(tool_buttons):
-            customtkinter.CTkButton(tools, text=text, command=cmd, fg_color=color, hover_color=BG_BORDER, height=34).grid(row=idx, column=0, padx=6, pady=4, sticky="ew")
+            customtkinter.CTkButton(tools, text=text, command=cmd, fg_color=color, hover_color=BG_BORDER, **button_style).grid(row=idx, column=0, padx=4, pady=3, sticky="ew")
 
 
-        self.accounts_scroll = customtkinter.CTkScrollableFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
-        self.accounts_scroll.grid(row=3, column=0, padx=10, pady=(6, 4), sticky="nsew")
+        self.accounts_scroll = customtkinter.CTkScrollableFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=6, border_width=0)
+        self.accounts_scroll.grid(row=3, column=0, padx=8, pady=(4, 3), sticky="nsew")
         self.accounts_scroll.grid_columnconfigure(0, weight=1)
         self._create_account_rows()
 
@@ -985,13 +992,12 @@ class App(customtkinter.CTk):
             controls_panel,
             fg_color="#0e1428",
             text_color="#98a7cf",
-            border_width=1,
-            border_color=BG_BORDER,
-            corner_radius=8,
+            border_width=0,
+            corner_radius=6,
             wrap="word",
             font=customtkinter.CTkFont(size=11),
         )
-        self.logs_box.grid(row=4, column=0, padx=10, pady=(4, 10), sticky="nsew")
+        self.logs_box.grid(row=4, column=0, padx=8, pady=(3, 6), sticky="nsew")
         self.log_manager.textbox = self.logs_box
         self._update_accounts_info()
 
