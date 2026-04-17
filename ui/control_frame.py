@@ -85,7 +85,6 @@ class ControlFrame(customtkinter.CTkFrame):
             pass
 
         window_width, window_height = self._dock_window_size
-        spacing = 0
 
         # 1) Порядок строго из аккаунтов в UI
         accounts_order = [acc.login for acc in AccountManager().accounts]
@@ -178,6 +177,7 @@ class ControlFrame(customtkinter.CTkFrame):
                 print(f"⚠️ Не удалось переместить {login}: {e}")
 
         print(f"✅ Размещено окон: {placed}")
+        self._raise_docked_windows_once()
 
         if self.accounts_list_frame:
             self.accounts_list_frame.set_green_for_launched_cs2(active_cs2_pids)
@@ -192,24 +192,24 @@ class ControlFrame(customtkinter.CTkFrame):
 
             ui_slots = getattr(app_window, "ui_grid_slots", None) or []
             for idx, slot in enumerate(ui_slots[: max_columns * max_rows]):
-                if not slot.winfo_exists():
-                    continue
-                row = idx // max_columns
-                col = idx % max_columns
-                x = slot.winfo_rootx() + 1
-                y = slot.winfo_rooty() + 1
-                slots.append((row, col, x, y))
+                if not slot.winfo_exists(): 
+                    continue 
+                row = idx // max_columns 
+                col = idx % max_columns 
+                x = slot.winfo_rootx()
+                y = slot.winfo_rooty()
+                slots.append((row, col, x, y)) 
 
             if len(slots) >= max_columns * max_rows:
                 return slots
 
-            anchor = getattr(app_window, "ui_grid_anchor", None)
-            if anchor and anchor.winfo_exists():
-                base_x = anchor.winfo_rootx() + 6
-                base_y = anchor.winfo_rooty() + 6
-            else:
-                base_x = app_window.winfo_rootx() + 18
-                base_y = app_window.winfo_rooty() + 70
+            anchor = getattr(app_window, "ui_grid_anchor", None) 
+            if anchor and anchor.winfo_exists(): 
+                base_x = anchor.winfo_rootx()
+                base_y = anchor.winfo_rooty()
+            else: 
+                base_x = app_window.winfo_rootx() + 18 
+                base_y = app_window.winfo_rooty() + 70 
 
             slots = []
             for idx in range(max_columns * max_rows):
@@ -221,6 +221,27 @@ class ControlFrame(customtkinter.CTkFrame):
         except Exception:
             return []
         return slots
+
+    def _raise_docked_windows_once(self):
+        if not self._docked_windows:
+            return
+
+        for _, _, hwnd in self._docked_windows:
+            if not hwnd or not win32gui.IsWindow(hwnd):
+                continue
+            try:
+                win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+                win32gui.SetWindowPos(
+                    hwnd,
+                    win32con.HWND_TOP,
+                    0,
+                    0,
+                    0,
+                    0,
+                    win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_NOACTIVATE,
+                )
+            except Exception:
+                continue
 
     def sync_docked_windows_with_panel(self):
         if not self._docked_windows:
