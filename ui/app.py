@@ -3292,8 +3292,10 @@ class App(customtkinter.CTk):
     # ---------------- Telegram bot ----------------
     def _try_start_telegram_bot_from_settings(self):
         token = (self.settings_manager.get("TelegramBotToken", "") or "").strip()
-        self.telegram_bot_create_button.grid(row=2, column=0, padx=(10, 6), pady=(0, 8), sticky="w")
-        self.telegram_bot_remove_button.grid(row=2, column=1, padx=(0, 10), pady=(0, 8), sticky="w")
+        if self.telegram_bot_create_button:
+            self.telegram_bot_create_button.grid(row=2, column=0, padx=(10, 6), pady=(0, 8), sticky="w")
+        if self.telegram_bot_remove_button:
+            self.telegram_bot_remove_button.grid(row=2, column=1, padx=(0, 10), pady=(0, 8), sticky="w")
         if self.telegram_bot_set_proxies_button:
             self.telegram_bot_set_proxies_button.grid(row=2, column=2, padx=(0, 10), pady=(0, 8), sticky="w")
         if not token:
