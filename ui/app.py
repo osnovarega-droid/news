@@ -867,17 +867,7 @@ class App(customtkinter.CTk):
 
         header = customtkinter.CTkFrame(frame, fg_color="transparent")
         header.grid(row=0, column=0, padx=0, pady=(0, 6), sticky="ew")
-        header.grid_columnconfigure(1, weight=1)
 
-
-
-        self.accounts_info = customtkinter.CTkLabel(
-            header,
-            text="0 accounts • 0 selected • 0 launched",
-            text_color=TXT_MUTED,
-            font=customtkinter.CTkFont(size=12),
-        )
-        self.accounts_info.grid(row=0, column=1, sticky="e")
 
         body = customtkinter.CTkFrame(frame, fg_color="transparent")
         body.grid(row=1, column=0, padx=0, pady=(0, 0), sticky="nsew")
@@ -892,7 +882,7 @@ class App(customtkinter.CTk):
             corner_radius=0,
             border_width=0,
         )
-        windows_panel.grid(row=0, column=0, padx=(0, 8), sticky="nw")
+        windows_panel.grid(row=0, column=0, padx=(1, 8), pady=(1, 0), sticky="nw")
         windows_panel.grid_columnconfigure(0, weight=0)
         windows_panel.grid_rowconfigure(0, weight=0)
         grid_wrap = customtkinter.CTkFrame(
@@ -931,8 +921,8 @@ class App(customtkinter.CTk):
         controls_panel = customtkinter.CTkFrame(body, fg_color=BG_CARD, corner_radius=0, border_width=0)
         controls_panel.grid(row=0, column=1, sticky="nsew")
         controls_panel.grid_columnconfigure(0, weight=1)
-        controls_panel.grid_rowconfigure(3, weight=2)
-        controls_panel.grid_rowconfigure(4, weight=1)
+        controls_panel.grid_rowconfigure(4, weight=2)
+        controls_panel.grid_rowconfigure(5, weight=1)
 
         quick = customtkinter.CTkFrame(controls_panel, fg_color="transparent")
         quick.grid(row=0, column=0, padx=10, pady=(10, 6), sticky="ew")
@@ -982,9 +972,16 @@ class App(customtkinter.CTk):
         for idx, (text, cmd, color) in enumerate(tool_buttons):
             customtkinter.CTkButton(tools, text=text, command=cmd, fg_color=color, hover_color=BG_BORDER, **button_style).grid(row=idx, column=0, padx=4, pady=3, sticky="ew")
 
-
+        self.accounts_info = customtkinter.CTkLabel(
+            controls_panel,
+            text="0 accounts • 0 selected • 0 launched",
+            text_color=TXT_MUTED,
+            font=customtkinter.CTkFont(size=12),
+            anchor="w",
+        )
+        self.accounts_info.grid(row=3, column=0, padx=12, pady=(2, 2), sticky="ew")
         self.accounts_scroll = customtkinter.CTkScrollableFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=6, border_width=0)
-        self.accounts_scroll.grid(row=3, column=0, padx=8, pady=(4, 3), sticky="nsew")
+        self.accounts_scroll.grid(row=4, column=0, padx=8, pady=(2, 3), sticky="nsew")
         self.accounts_scroll.grid_columnconfigure(0, weight=1)
         self._create_account_rows()
 
@@ -997,7 +994,7 @@ class App(customtkinter.CTk):
             wrap="word",
             font=customtkinter.CTkFont(size=11),
         )
-        self.logs_box.grid(row=4, column=0, padx=8, pady=(3, 6), sticky="nsew")
+        self.logs_box.grid(row=5, column=0, padx=8, pady=(3, 6), sticky="nsew")
         self.log_manager.textbox = self.logs_box
         self._update_accounts_info()
 
@@ -2190,9 +2187,16 @@ class App(customtkinter.CTk):
 
     def _refresh_docked_windows_topmost(self):
         self._dock_topmost_job = None
-        if self.state() != "iconic" and self.control_frame:
+        window_state = self.state()
+        is_visible = window_state == "normal" and bool(self.winfo_viewable())
+        if is_visible and self.control_frame:
             try:
                 self.control_frame.raise_docked_windows()
+            except Exception:
+                pass
+        elif self.control_frame:
+            try:
+                self.control_frame.set_docked_windows_topmost(False)
             except Exception:
                 pass
         self._dock_topmost_job = self.after(1000, self._refresh_docked_windows_topmost)
@@ -2204,9 +2208,11 @@ class App(customtkinter.CTk):
     def _on_main_window_unmap(self, event):
         if event.widget is not self:
             return
-        if self.state() == "iconic" and self.control_frame:
+        if self.control_frame:
             try:
-                self.control_frame.set_docked_windows_minimized(True)
+                self.control_frame.set_docked_windows_topmost(False)
+                if self.state() == "iconic":
+                    self.control_frame.set_docked_windows_minimized(True)
             except Exception:
                 pass
 
@@ -2216,6 +2222,7 @@ class App(customtkinter.CTk):
         if self.control_frame:
             try:
                 self.control_frame.set_docked_windows_minimized(False)
+                self.control_frame.set_docked_windows_topmost(True)
             except Exception:
                 pass
         self._schedule_docked_windows_sync(delay_ms=120)
