@@ -25,7 +25,7 @@ class ControlFrame(customtkinter.CTkFrame):
         self._docked_windows = []
         self._dock_window_size = (640, 480)
         self._dock_grid_size = (2, 2)
-        self._dock_slot_padding = 4
+        self._dock_slot_padding = 0
         self.accounts_list_frame = None
 
         self.grid(row=1, column=3, padx=(20, 20), pady=(20, 0), sticky="nsew")
@@ -212,8 +212,8 @@ class ControlFrame(customtkinter.CTkFrame):
                 base_x = anchor.winfo_rootx()
                 base_y = anchor.winfo_rooty()
             else: 
-                base_x = app_window.winfo_rootx() + 18 
-                base_y = app_window.winfo_rooty() + 70 
+                base_x = app_window.winfo_rootx()
+                base_y = app_window.winfo_rooty() 
 
             slots = []
             for idx in range(max_columns * max_rows):
