@@ -81,8 +81,8 @@ class ControlFrame(customtkinter.CTkFrame):
         except Exception:
             pass
 
-        window_width = 383
-        window_height = 280
+        window_width = 640
+        window_height = 480
         spacing = 0
 
         # 1) Порядок строго из аккаунтов в UI
@@ -152,14 +152,32 @@ class ControlFrame(customtkinter.CTkFrame):
             print("❌ Не найдено подходящих окон CS2 для расстановки")
             return
 
-        # 5) Ставим окна в сетку: строго по 5 окон в ряд, затем следующий ряд.
-        max_columns = 5
+        # 5) Ставим окна в сетку 2x2 (640x480) внутри области UI слева.
+        max_columns = 2
+        max_rows = 2
+        max_slots = max_columns * max_rows
+
+        app_window = self.winfo_toplevel()
+        base_x = 0
+        base_y = 0
+        try:
+            app_window.update_idletasks()
+            anchor = getattr(app_window, "ui_grid_anchor", None)
+            if anchor and anchor.winfo_exists():
+                base_x = anchor.winfo_rootx() + 6
+                base_y = anchor.winfo_rooty() + 6
+            else:
+                base_x = app_window.winfo_rootx() + 18
+                base_y = app_window.winfo_rooty() + 70
+        except Exception:
+            pass
+
         placed = 0
-        for idx, (login, pid, hwnd) in enumerate(ordered_windows):
+        for idx, (login, pid, hwnd) in enumerate(ordered_windows[:max_slots]):
             col = idx % max_columns
             row = idx // max_columns
-            x = col * (window_width + spacing)
-            y = row * (window_height + spacing)
+            x = base_x + col * (window_width + spacing)
+            y = base_y + row * (window_height + spacing)
             try:
                 win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
                 win32gui.MoveWindow(hwnd, x, y, window_width, window_height, True)
