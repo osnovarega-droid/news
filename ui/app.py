@@ -379,7 +379,7 @@ class App(customtkinter.CTk):
             self._background_license_check_in_flight = False
             self.http_session = requests.Session()
             self.http_session.trust_env = False  # игнорировать системные прокси/ENV
-            self.http_session.verify = True  # для http:// не влияет
+            self._dock_sync_job = None
             self._load_window_position()
 
         def load_resources():
@@ -430,6 +430,9 @@ class App(customtkinter.CTk):
 
         def finalize_startup():
             self.protocol("WM_DELETE_WINDOW", self.on_closing)
+            self.bind("<Configure>", self._on_main_window_configure)
+            self.bind("<Unmap>", self._on_main_window_unmap)
+            self.bind("<Map>", self._on_main_window_map)
             self.show_section("functional")
             self._start_ui_actions_pump()
             self._start_runtime_status_tracking()
@@ -903,10 +906,12 @@ class App(customtkinter.CTk):
         grid_wrap.grid_columnconfigure((0, 1), weight=1)
         grid_wrap.grid_rowconfigure((0, 1), weight=1)
 
+        self.ui_grid_slots = []
         for i in range(4):
             r, c = divmod(i, 2)
             slot = customtkinter.CTkFrame(grid_wrap, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
             slot.grid(row=r, column=c, padx=6, pady=6, sticky="nsew")
+            self.ui_grid_slots.append(slot)
             customtkinter.CTkLabel(
                 slot,
                 text=f"Window {i + 1}\n640x480",
@@ -2146,7 +2151,48 @@ class App(customtkinter.CTk):
         if not self._ensure_license():
             return
         self._run_action_async(self.control_frame.move_all_cs_windows)
+    def _schedule_docked_windows_sync(self, delay_ms=60):
+        if self._dock_sync_job:
+            try:
+                self.after_cancel(self._dock_sync_job)
+            except Exception:
+                pass
+        self._dock_sync_job = self.after(delay_ms, self._sync_docked_cs_windows)
 
+    def _sync_docked_cs_windows(self):
+        self._dock_sync_job = None
+        if not self.control_frame:
+            return
+        if self.state() == "iconic":
+            return
+        try:
+            self.control_frame.sync_docked_windows_with_panel()
+        except Exception:
+            pass
+
+    def _on_main_window_configure(self, event):
+        if event.widget is not self:
+            return
+        self._schedule_docked_windows_sync()
+
+    def _on_main_window_unmap(self, event):
+        if event.widget is not self:
+            return
+        if self.state() == "iconic" and self.control_frame:
+            try:
+                self.control_frame.set_docked_windows_minimized(True)
+            except Exception:
+                pass
+
+    def _on_main_window_map(self, event):
+        if event.widget is not self:
+            return
+        if self.control_frame:
+            try:
+                self.control_frame.set_docked_windows_minimized(False)
+            except Exception:
+                pass
+        self._schedule_docked_windows_sync(delay_ms=120)
     def _action_launch_bes(self):
         if not self._ensure_license():
             return
