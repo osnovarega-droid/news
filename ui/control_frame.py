@@ -182,10 +182,10 @@ class ControlFrame(customtkinter.CTkFrame):
         if self.accounts_list_frame:
             self.accounts_list_frame.set_green_for_launched_cs2(active_cs2_pids)
 
-    def _get_grid_slots(self, app_window):
-        slots = []
-        width, height = self._dock_window_size
-        spacing = 0
+    def _get_grid_slots(self, app_window): 
+        slots = [] 
+        width, height = self._dock_window_size 
+        spacing = 1
         max_columns, max_rows = self._dock_grid_size
         try:
             app_window.update_idletasks()
@@ -231,14 +231,14 @@ class ControlFrame(customtkinter.CTkFrame):
                 continue
             try:
                 win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
-                win32gui.SetWindowPos(
-                    hwnd,
-                    win32con.HWND_TOP,
-                    0,
-                    0,
-                    0,
-                    0,
-                    win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_NOACTIVATE,
+                win32gui.SetWindowPos( 
+                    hwnd, 
+                    win32con.HWND_TOPMOST,
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_NOACTIVATE, 
                 )
             except Exception:
                 continue
@@ -263,6 +263,15 @@ class ControlFrame(customtkinter.CTkFrame):
                 if win32gui.IsIconic(hwnd):
                     continue
                 win32gui.MoveWindow(hwnd, x, y, width, height, True)
+                win32gui.SetWindowPos(
+                    hwnd,
+                    win32con.HWND_TOPMOST,
+                    0,
+                    0,
+                    0,
+                    0,
+                    win32con.SWP_NOMOVE | win32con.SWP_NOSIZE | win32con.SWP_NOACTIVATE,
+                )
             except Exception:
                 continue
 
