@@ -863,14 +863,11 @@ class App(customtkinter.CTk):
     def _build_functional_section(self, parent):
         frame = customtkinter.CTkFrame(parent, fg_color="transparent")
         frame.grid_columnconfigure(0, weight=1)
-        frame.grid_rowconfigure(1, weight=1)
-
-        header = customtkinter.CTkFrame(frame, fg_color="transparent")
-        header.grid(row=0, column=0, padx=0, pady=(0, 6), sticky="ew")
+        frame.grid_rowconfigure(0, weight=1)
 
 
         body = customtkinter.CTkFrame(frame, fg_color="transparent")
-        body.grid(row=1, column=0, padx=0, pady=(0, 0), sticky="nsew")
+        body.grid(row=0, column=0, padx=0, pady=(0, 0), sticky="nsew")
         body.grid_columnconfigure(0, weight=0, minsize=1292)
         body.grid_columnconfigure(1, weight=1, minsize=430)
         body.grid_rowconfigure(0, weight=1)
