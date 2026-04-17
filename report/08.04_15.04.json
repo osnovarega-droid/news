@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 3,
+  "periodStart": "2026-04-07T21:00:00.000Z",
+  "periodEnd": "2026-04-14T21:00:00.000Z",
+  "accounts": {
+    "jlxtovyj187649": true,
+    "lysea62": true,
+    "biibkpnn50uxs": true,
+    "alina_petrova93": true,
+    "efah89wrskpyoxh": true,
+    "faggamfb58cn": true,
+    "arcanerunner2003": true,
+    "steelnexus11": true,
+    "erhlbdzg319": true,
+    "ygtg60tswkkvgw": true,
+    "izwejoai32pl": true,
+    "nvbiaihh10xjjlf": true,
+    "QuantumRiftX1": true,
+    "pixelhunter221": true,
+    "battlezone_dan": true,
+    "NovaStrike777": true
+  },
+  "cases": {},
+  "skins": {},
+  "anotherDrops": {
+    "730-Anarchist": {
+      "amount": 2,
+      "totalPrice": 0.08,
+      "lastPriceText": "$0.04",
+      "pricedCount": 2
+    },
+    "730-Balkan": {
+      "amount": 3,
+      "totalPrice": 0.12,
+      "lastPriceText": "$0.04",
+      "pricedCount": 3
+    },
+    "301200-The Bad": {
+      "amount": 1,
+      "totalPrice": 0.08,
+      "lastPriceText": "$0.08",
+      "pricedCount": 1
+    },
+    "Mann Co. Supply Crate Key": {
+      "amount": 23,
+      "totalPrice": 56.529999999999994,
+      "lastPriceText": "$2.50",
+      "pricedCount": 23
+    },
+    "Specialized Killstreak Scottish Resistance Kit Fabricator": {
+      "amount": 1,
+      "totalPrice": 0.03,
+      "lastPriceText": "$0.03",
+      "pricedCount": 1
+    },
+    "Specialized Killstreak Bat Outta Hell Kit Fabricator": {
+      "amount": 6,
+      "totalPrice": 0.18,
+      "lastPriceText": "$0.03",
+      "pricedCount": 6
+    },
+    "Tour of Duty Ticket": {
+      "amount": 2,
+      "totalPrice": 2.16,
+      "lastPriceText": "$1.08",
+      "pricedCount": 2
+    }
+  },
+  "totalCs2Drops": 0,
+  "totalCs2DropValue": 0,
+  "totalCases": 0,
+  "totalCaseValue": 0,
+  "totalSkins": 0,
+  "totalSkinValue": 0,
+  "totalAllSkins": 0,
+  "totalAllSkinValue": 0,
+  "totalAnotherDrops": 38,
+  "totalAnotherDropValue": 59.18
+}

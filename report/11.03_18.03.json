@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 3,
+  "periodStart": "2026-03-10T21:00:00.000Z",
+  "periodEnd": "2026-03-17T21:00:00.000Z",
+  "accounts": {
+    "pixelhunter221": true,
+    "maria_sokolova99s": true,
+    "sergey_kuznetsov13": true,
+    "alina_petrova93": true
+  },
+  "cases": {
+    "Dreams & Nightmares Case": {
+      "amount": 4,
+      "totalPrice": 8.600000000000001,
+      "lastPriceText": "$2.16",
+      "pricedCount": 4
+    },
+    "Recoil Case": {
+      "amount": 5,
+      "totalPrice": 2.67,
+      "lastPriceText": "$0.55",
+      "pricedCount": 5
+    },
+    "Sealed Genesis Terminal": {
+      "amount": 1,
+      "totalPrice": 0.51,
+      "lastPriceText": "$0.51",
+      "pricedCount": 1
+    },
+    "Kilowatt Case": {
+      "amount": 1,
+      "totalPrice": 0.35,
+      "lastPriceText": "$0.35",
+      "pricedCount": 1
+    }
+  },
+  "skins": {
+    "FAMAS | Yeti Camo (Factory New)": {
+      "amount": 1,
+      "totalPrice": 9.92,
+      "lastPriceText": "$9.92",
+      "pricedCount": 1
+    }
+  },
+  "anotherDrops": {},
+  "totalCs2Drops": 23,
+  "totalCs2DropValue": 22.690000000000005,
+  "totalCases": 11,
+  "totalCaseValue": 12.13,
+  "totalSkins": 1,
+  "totalSkinValue": 9.92,
+  "totalAllSkins": 12,
+  "totalAllSkinValue": 10.559999999999997,
+  "totalAnotherDrops": 0,
+  "totalAnotherDropValue": 0
+}

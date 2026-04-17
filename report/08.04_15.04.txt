@@ -1,0 +1,31 @@
+```
+💎 Goose Panel 💎
+
+🗓 PERIOD: 08/04/2026 - 15/04/2026
+
+Accounts: 16
+
+Case                               | Amount | % of drops
+-----------------------------------+--------+-----------
+No case drops                     | 0      | 0.0
+-----------------------------------+--------+-----------
+
+(Top 10 skins)                     | Amount | Price $
+-----------------------------------+--------+--------
+No skins above threshold          | 0      | N/A
+-----------------------------------+--------+--------
+
+➙ Price of all drop: ~ 0.00$.
+➙ Total cases: 0 pcs.
+➙ AVG price of cases/all drop: 0.00$/0.00$.
+
+another drop:
+- Mann Co. Supply Crate Key | 23 | 2.46$
+- Specialized Killstreak Bat Outta Hell Kit Fabricator | 6 | 0.03$
+- 730-Balkan | 3 | 0.04$
+- 730-Anarchist | 2 | 0.04$
+- Tour of Duty Ticket | 2 | 1.08$
+- 301200-The Bad | 1 | 0.08$
+- Specialized Killstreak Scottish Resistance Kit Fabricator | 1 | 0.03$
+➙ Price of another drop: ~ 59.18$.
+```

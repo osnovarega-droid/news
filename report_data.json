@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 3,
+  "periodStart": "2026-04-14T21:00:00.000Z",
+  "periodEnd": "2026-04-21T21:00:00.000Z",
+  "accounts": {
+    "ShadowFury_89": true,
+    "QuantumRiftX1": true,
+    "byte_stalker41": true,
+    "pixelhunter221": true,
+    "alina_petrova93": true,
+    "steelnexus11": true,
+    "cs2_elite2025": true,
+    "oleg_morozov91": true,
+    "valeriyKozakov86": true,
+    "nvbiaihh10xjjlf": true,
+    "faggamfb58cn": true,
+    "zntk57maqgaqso": true,
+    "lysea62": true,
+    "cjywwzqd88w": true
+  },
+  "cases": {},
+  "skins": {},
+  "anotherDrops": {
+    "Mann Co. Supply Crate Key": {
+      "amount": 19,
+      "totalPrice": 46.92999999999999,
+      "lastPriceText": "$2.47",
+      "pricedCount": 19
+    }
+  },
+  "totalCs2Drops": 0,
+  "totalCs2DropValue": 0,
+  "totalCases": 0,
+  "totalCaseValue": 0,
+  "totalSkins": 0,
+  "totalSkinValue": 0,
+  "totalAllSkins": 0,
+  "totalAllSkinValue": 0,
+  "totalAnotherDrops": 19,
+  "totalAnotherDropValue": 46.92999999999999
+}

@@ -1,0 +1,42 @@
+```
+💎 Goose Panel 💎
+
+🗓 PERIOD: 01/04/2026 - 08/04/2026
+
+Accounts: 20
+
+Case                               | Amount | % of drops
+-----------------------------------+--------+-----------
+No case drops                     | 0      | 0.0
+-----------------------------------+--------+-----------
+
+(Top 10 skins)                     | Amount | Price $
+-----------------------------------+--------+--------
+No skins above threshold          | 0      | N/A
+-----------------------------------+--------+--------
+
+➙ Price of all drop: ~ 0.00$.
+➙ Total cases: 0 pcs.
+➙ AVG price of cases/all drop: 0.00$/0.00$.
+
+another drop:
+- 730-Anarchist | 12 | 0.04$
+- Mann Co. Supply Crate Key | 10 | 2.44$
+- 730-Balkan | 9 | 0.04$
+- 730-FBI | 9 | 0.04$
+- 730-SWAT | 8 | 0.05$
+- 730-IDF | 7 | 0.04$
+- 512160-Horizontal View (Trading Card) | 2 | N/A$
+- Specialized Killstreak Scottish Resistance Kit Fabricator | 2 | 0.04$
+- Tour of Duty Ticket | 2 | 1.01$
+- 301190-Jamaica (Trading Card) | 1 | N/A$
+- 301190-Warsaw | 1 | 0.05$
+- 301200-Da da da | 1 | 0.04$
+- 301200-Hiss | 1 | N/A$
+- 301200-The Bad | 1 | 0.04$
+- 512160-Arcade Game | 1 | N/A$
+- 576810-Wolf | 1 | 0.09$
+- 615610-Jupiterish (Trading Card) | 1 | 0.10$
+- Violet Vermin Case | 1 | 0.66$
+➙ Price of another drop: ~ 28.99$.
+```

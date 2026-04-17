@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 3,
+  "periodStart": "2026-03-31T21:00:00.000Z",
+  "periodEnd": "2026-04-07T21:00:00.000Z",
+  "accounts": {
+    "QuantumRiftX1": true,
+    "byte_stalker41": true,
+    "alina_petrova93": true,
+    "valeriyKozakov86": true,
+    "cjywwzqd88w": true,
+    "efah89wrskpyoxh": true,
+    "erhlbdzg319": true,
+    "ygtg60tswkkvgw": true,
+    "izwejoai32pl": true,
+    "nvbiaihh10xjjlf": true,
+    "jlxtovyj187649": true,
+    "faggamfb58cn": true,
+    "zntk57maqgaqso": true,
+    "valeriysokolov41": true,
+    "lysea62": true,
+    "eyiq49gmfoxtuka": true,
+    "osoouzwf316": true,
+    "himyicmz60": true,
+    "ddkeizxu375": true,
+    "autlmekp47nhfy": true
+  },
+  "cases": {},
+  "skins": {},
+  "anotherDrops": {
+    "Mann Co. Supply Crate Key": {
+      "amount": 10,
+      "totalPrice": 24.400000000000002,
+      "lastPriceText": "$2.44",
+      "pricedCount": 10
+    },
+    "Tour of Duty Ticket": {
+      "amount": 2,
+      "totalPrice": 2.02,
+      "lastPriceText": "$1.01",
+      "pricedCount": 2
+    },
+    "Violet Vermin Case": {
+      "amount": 1,
+      "totalPrice": 0.66,
+      "lastPriceText": "$0.66",
+      "pricedCount": 1
+    },
+    "Specialized Killstreak Scottish Resistance Kit Fabricator": {
+      "amount": 2,
+      "totalPrice": 0.08,
+      "lastPriceText": "$0.04",
+      "pricedCount": 2
+    },
+    "730-Balkan": {
+      "amount": 9,
+      "totalPrice": 0.28,
+      "lastPriceText": "$0.04",
+      "pricedCount": 7
+    },
+    "730-FBI": {
+      "amount": 9,
+      "totalPrice": 0.26,
+      "lastPriceText": "$0.04",
+      "pricedCount": 6
+    },
+    "730-SWAT": {
+      "amount": 8,
+      "totalPrice": 0.3,
+      "lastPriceText": "$0.05",
+      "pricedCount": 6
+    },
+    "615610-Jupiterish (Trading Card)": {
+      "amount": 1,
+      "totalPrice": 0.1,
+      "lastPriceText": "$0.10",
+      "pricedCount": 1
+    },
+    "730-Anarchist": {
+      "amount": 12,
+      "totalPrice": 0.43,
+      "lastPriceText": "$0.05",
+      "pricedCount": 10
+    },
+    "576810-Wolf": {
+      "amount": 1,
+      "totalPrice": 0.09,
+      "lastPriceText": "$0.09",
+      "pricedCount": 1
+    },
+    "730-IDF": {
+      "amount": 7,
+      "totalPrice": 0.24000000000000002,
+      "lastPriceText": "$0.04",
+      "pricedCount": 6
+    },
+    "301190-Jamaica (Trading Card)": {
+      "amount": 1,
+      "totalPrice": 0,
+      "lastPriceText": "N/A",
+      "pricedCount": 0
+    },
+    "301200-Hiss": {
+      "amount": 1,
+      "totalPrice": 0,
+      "lastPriceText": "N/A",
+      "pricedCount": 0
+    },
+    "301190-Warsaw": {
+      "amount": 1,
+      "totalPrice": 0.05,
+      "lastPriceText": "$0.05",
+      "pricedCount": 1
+    },
+    "301200-Da da da": {
+      "amount": 1,
+      "totalPrice": 0.04,
+      "lastPriceText": "$0.04",
+      "pricedCount": 1
+    },
+    "301200-The Bad": {
+      "amount": 1,
+      "totalPrice": 0.04,
+      "lastPriceText": "$0.04",
+      "pricedCount": 1
+    },
+    "512160-Arcade Game": {
+      "amount": 1,
+      "totalPrice": 0,
+      "lastPriceText": "N/A",
+      "pricedCount": 0
+    },
+    "512160-Horizontal View (Trading Card)": {
+      "amount": 2,
+      "totalPrice": 0,
+      "lastPriceText": "N/A",
+      "pricedCount": 0
+    }
+  },
+  "totalCs2Drops": 0,
+  "totalCs2DropValue": 0,
+  "totalCases": 0,
+  "totalCaseValue": 0,
+  "totalSkins": 0,
+  "totalSkinValue": 0,
+  "totalAllSkins": 0,
+  "totalAllSkinValue": 0,
+  "totalAnotherDrops": 70,
+  "totalAnotherDropValue": 28.98999999999999
+}

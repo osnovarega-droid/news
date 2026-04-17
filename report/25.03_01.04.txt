@@ -1,0 +1,27 @@
+```
+💎 Goose Panel 💎
+
+🗓 PERIOD: 25/03/2026 - 01/04/2026
+
+Accounts: 7
+
+Case                               | Amount | % of drops
+-----------------------------------+--------+-----------
+Kilowatt Case                      | 1      | 33.3
+Revolution Case                    | 1      | 33.3
+Sealed Graffiti | Jump Shot (De... | 1      | 33.3
+-----------------------------------+--------+-----------
+
+(Top 10 skins)                     | Amount | Price $
+-----------------------------------+--------+--------
+No skins above threshold          | 0      | N/A
+-----------------------------------+--------+--------
+
+➙ Price of all drop: ~ 0.91$.
+➙ Total cases: 3 pcs.
+➙ AVG price of cases/all drop: 0.28$/0.35$.
+
+another drop:
+- Mann Co. Supply Crate Key | 14 | 2.42$
+➙ Price of another drop: ~ 33.87$.
+```

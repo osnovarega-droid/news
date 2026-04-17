@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 3,
+  "periodStart": "2026-03-17T21:00:00.000Z",
+  "periodEnd": "2026-03-24T21:00:00.000Z",
+  "accounts": {
+    "csdrop_master": true,
+    "smokepeek_3k": true,
+    "glitch_boi777": true,
+    "ShadowFury_89": true,
+    "CryoZenix_901": true,
+    "EchoByte_321": true,
+    "NeonWolf_47x": true,
+    "NovaCircuit14": true,
+    "QuantumRiftX1": true,
+    "vault_rider_07": true,
+    "SilentNova771": true,
+    "VortexFuse15": true,
+    "arcanerunner2003": true,
+    "boosted_raccoon": true,
+    "byte_stalker41": true,
+    "clutchKing_31": true,
+    "danix22s1": true,
+    "darkforge_zx": true,
+    "frostblade0312": true,
+    "glitchraven8": true,
+    "oleg_smirnofff3131": true,
+    "pixelhunter221": true,
+    "shadowcrypt94": true,
+    "steelnexus11": true,
+    "nikita_fedorov33": true,
+    "elena_volkova1990": true,
+    "tatiana_belova19": true,
+    "oleg_morozov91": true,
+    "valeriyKozakov86": true,
+    "toxic_sniper132": true,
+    "maria_sokolova99s": true,
+    "cs2_elite2025": true,
+    "NovaStrike777": true,
+    "irina_zaitseva84": true,
+    "battlezone_dan": true,
+    "sergey_kuznetsov13": true,
+    "alina_petrova93": true,
+    "PixelNomadX3": true,
+    "mr_cody99": true,
+    "antonina872": true
+  },
+  "cases": {
+    "Kilowatt Case": {
+      "amount": 16,
+      "totalPrice": 5.459999999999998,
+      "lastPriceText": "$0.34",
+      "pricedCount": 16
+    },
+    "Sealed Genesis Terminal": {
+      "amount": 9,
+      "totalPrice": 3.61,
+      "lastPriceText": "$0.43",
+      "pricedCount": 9
+    },
+    "Dreams & Nightmares Case": {
+      "amount": 7,
+      "totalPrice": 13.549999999999999,
+      "lastPriceText": "$1.90",
+      "pricedCount": 7
+    },
+    "Revolution Case": {
+      "amount": 15,
+      "totalPrice": 6.210000000000001,
+      "lastPriceText": "$0.40",
+      "pricedCount": 15
+    },
+    "Recoil Case": {
+      "amount": 1,
+      "totalPrice": 0.55,
+      "lastPriceText": "$0.55",
+      "pricedCount": 1
+    },
+    "Fever Case": {
+      "amount": 1,
+      "totalPrice": 0.99,
+      "lastPriceText": "$0.99",
+      "pricedCount": 1
+    }
+  },
+  "skins": {
+    "AUG | Creep (Field-Tested)": {
+      "amount": 1,
+      "totalPrice": 0.66,
+      "lastPriceText": "$0.66",
+      "pricedCount": 1
+    },
+    "AK-47 | Midnight Laminate (Minimal Wear)": {
+      "amount": 1,
+      "totalPrice": 22.45,
+      "lastPriceText": "$22.45",
+      "pricedCount": 1
+    },
+    "FAMAS | Yeti Camo (Field-Tested)": {
+      "amount": 1,
+      "totalPrice": 0.63,
+      "lastPriceText": "$0.63",
+      "pricedCount": 1
+    },
+    "Glock-18 | Glockingbird (Field-Tested)": {
+      "amount": 1,
+      "totalPrice": 2.01,
+      "lastPriceText": "$2.01",
+      "pricedCount": 1
+    }
+  },
+  "anotherDrops": {
+    "Mann Co. Supply Crate Key": {
+      "amount": 50,
+      "totalPrice": 117.40000000000008,
+      "lastPriceText": "$2.48",
+      "pricedCount": 48
+    },
+    "730-Anarchist": {
+      "amount": 1,
+      "totalPrice": 0.04,
+      "lastPriceText": "$0.04",
+      "pricedCount": 1
+    },
+    "730-SWAT": {
+      "amount": 1,
+      "totalPrice": 0.04,
+      "lastPriceText": "$0.04",
+      "pricedCount": 1
+    }
+  },
+  "totalCs2Drops": 98,
+  "totalCs2DropValue": 59.59000000000004,
+  "totalCases": 49,
+  "totalCaseValue": 30.36999999999999,
+  "totalSkins": 4,
+  "totalSkinValue": 25.75,
+  "totalAllSkins": 49,
+  "totalAllSkinValue": 29.220000000000013,
+  "totalAnotherDrops": 52,
+  "totalAnotherDropValue": 117.48000000000008
+}

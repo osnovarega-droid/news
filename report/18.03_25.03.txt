@@ -1,0 +1,35 @@
+```
+💎 Goose Panel 💎
+
+🗓 PERIOD: 18/03/2026 - 25/03/2026
+
+Accounts: 40
+
+Case                               | Amount | % of drops
+-----------------------------------+--------+-----------
+Kilowatt Case                      | 16     | 32.7
+Revolution Case                    | 15     | 30.6
+Sealed Genesis Terminal            | 9      | 18.4
+Dreams & Nightmares Case           | 7      | 14.3
+Fever Case                         | 1      | 2.0
+Recoil Case                        | 1      | 2.0
+-----------------------------------+--------+-----------
+
+(Top 10 skins)                     | Amount | Price $
+-----------------------------------+--------+--------
+AK-47 | Midnight Laminate (Mini... | 1      | 22.45
+Glock-18 | Glockingbird (Field-... | 1      | 2.01
+AUG | Creep (Field-Tested)         | 1      | 0.66
+FAMAS | Yeti Camo (Field-Tested)   | 1      | 0.63
+-----------------------------------+--------+--------
+
+➙ Price of all drop: ~ 59.59$.
+➙ Total cases: 49 pcs.
+➙ AVG price of cases/all drop: 0.62$/1.22$.
+
+another drop:
+- Mann Co. Supply Crate Key | 50 | 2.45$
+- 730-Anarchist | 1 | 0.04$
+- 730-SWAT | 1 | 0.04$
+➙ Price of another drop: ~ 117.48$.
+```
