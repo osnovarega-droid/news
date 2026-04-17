@@ -404,6 +404,8 @@ class App(customtkinter.CTk):
             self.control_frame = None
             self.farmed_file = Path("settings/accs_list.txt")
             self.farmed_file.parent.mkdir(exist_ok=True)
+            self._dock_sync_job = None
+            self._dock_topmost_job = None
 
         def load_accounts_data():
             self.levels_cache = self._load_levels_from_json()
@@ -433,10 +435,11 @@ class App(customtkinter.CTk):
             self.bind("<Configure>", self._on_main_window_configure)
             self.bind("<Unmap>", self._on_main_window_unmap)
             self.bind("<Map>", self._on_main_window_map)
+            self.bind("<FocusIn>", self._on_main_window_focus_in)
             self.show_section("functional")
             self._start_ui_actions_pump()
             self._start_runtime_status_tracking()
-    
+            self._start_docked_windows_topmost_guard()    
 
 
             self.deiconify()
@@ -896,8 +899,8 @@ class App(customtkinter.CTk):
         windows_panel.grid_rowconfigure(0, weight=0)
         grid_wrap = customtkinter.CTkFrame(
             windows_panel,
-            width=1281,
-            height=961,
+            width=1292,
+            height=972,
             corner_radius=8,
             fg_color=BG_CARD_ALT,
             border_width=2,
@@ -913,14 +916,14 @@ class App(customtkinter.CTk):
             r, c = divmod(i, 2)
             slot = customtkinter.CTkFrame(
                 grid_wrap,
-                width=640,
-                height=480,
+                width=642,
+                height=482,
                 fg_color=BG_CARD_ALT,
                 corner_radius=4,
                 border_width=2,
                 border_color=ACCENT_GREEN,
             )
-            slot.grid(row=r, column=c, padx=(0 if c == 0 else 1, 0), pady=(0 if r == 0 else 1, 0), sticky="nw")
+            slot.grid(row=r, column=c, padx=3, pady=3, sticky="nw")
             slot.grid_propagate(False)
             self.ui_grid_slots.append(slot)
 
@@ -931,22 +934,22 @@ class App(customtkinter.CTk):
         controls_panel = customtkinter.CTkFrame(body, fg_color=BG_CARD, corner_radius=10, border_width=1, border_color=BG_BORDER)
         controls_panel.grid(row=0, column=1, sticky="nsew")
         controls_panel.grid_columnconfigure(0, weight=1)
-        controls_panel.grid_rowconfigure(3, weight=1)
+        controls_panel.grid_rowconfigure(3, weight=2)
         controls_panel.grid_rowconfigure(4, weight=1)
 
         quick = customtkinter.CTkFrame(controls_panel, fg_color="transparent")
         quick.grid(row=0, column=0, padx=10, pady=(10, 6), sticky="ew")
         for i in range(2):
             quick.grid_columnconfigure(i, weight=1)
-        customtkinter.CTkButton(quick, text="Select 4 accs", command=self._action_select_first_4, fg_color=ACCENT_PURPLE, hover_color="#313866", height=34).grid(row=0, column=0, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(quick, text="Select all", command=self._action_select_all_toggle, fg_color=BG_CARD_ALT, hover_color=BG_BORDER, height=34).grid(row=0, column=1, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(quick, text="Launch selected", command=self._action_start_selected, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, height=34).grid(row=1, column=0, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(quick, text="Kill selected", command=self._action_kill_selected, fg_color=ACCENT_RED, hover_color="#962c38", height=34).grid(row=1, column=1, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(quick, text="Move all CS windows", command=self._action_move_all_cs_windows, fg_color=ACCENT_GREEN, hover_color="#177844", height=34).grid(row=2, column=0, columnspan=2, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(quick, text="Select 4 accs", command=self._action_select_first_4, fg_color=ACCENT_PURPLE, hover_color="#313866", height=36).grid(row=0, column=0, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(quick, text="Select all", command=self._action_select_all_toggle, fg_color=BG_CARD_ALT, hover_color=BG_BORDER, height=36).grid(row=0, column=1, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(quick, text="Launch selected", command=self._action_start_selected, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, height=36).grid(row=1, column=0, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(quick, text="Kill selected", command=self._action_kill_selected, fg_color=ACCENT_RED, hover_color="#962c38", height=36).grid(row=1, column=1, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(quick, text="Move all CS windows", command=self._action_move_all_cs_windows, fg_color=ACCENT_GREEN, hover_color="#177844", height=36).grid(row=2, column=0, columnspan=2, padx=4, pady=4, sticky="ew")
 
         lobby = customtkinter.CTkFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
         lobby.grid(row=1, column=0, padx=10, pady=6, sticky="ew")
-        lobby.grid_columnconfigure((0, 1), weight=1)
+        lobby.grid_columnconfigure(0, weight=1)
 
         lobby_buttons = [
             ("Make Lobbies", self._action_make_lobbies, BG_CARD),
@@ -955,13 +958,12 @@ class App(customtkinter.CTk):
             ("Shuffle Lobbies", self._action_shuffle_lobbies, BG_CARD),
         ]
         for idx, (text, cmd, color) in enumerate(lobby_buttons):
-            r, c = divmod(idx, 2)
-            btn = customtkinter.CTkButton(lobby, text=text, command=cmd, fg_color=color, hover_color=BG_BORDER, height=30)
-            btn.grid(row=r, column=c, padx=4, pady=4, sticky="ew")
+            btn = customtkinter.CTkButton(lobby, text=text, command=cmd, fg_color=color, hover_color=BG_BORDER, height=34)
+            btn.grid(row=idx, column=0, padx=6, pady=4, sticky="ew")
             self.lobby_buttons[text] = btn
         tools = customtkinter.CTkFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
         tools.grid(row=2, column=0, padx=10, pady=6, sticky="ew")
-        tools.grid_columnconfigure((0, 1), weight=1)
+        tools.grid_columnconfigure(0, weight=1)
         tool_buttons = [
             ("Launch steam", self._action_launch_steam_selected, ACCENT_BLUE),
             ("Start booster", self._action_start_booster_selected, ACCENT_GREEN),
@@ -971,8 +973,8 @@ class App(customtkinter.CTk):
             ("Send trade", self._action_send_trade_selected, ACCENT_GREEN),
         ]
         for idx, (text, cmd, color) in enumerate(tool_buttons):
-            r, c = divmod(idx, 2)
-            customtkinter.CTkButton(tools, text=text, command=cmd, fg_color=color, hover_color=BG_BORDER, height=30).grid(row=r, column=c, padx=4, pady=4, sticky="ew")
+            customtkinter.CTkButton(tools, text=text, command=cmd, fg_color=color, hover_color=BG_BORDER, height=34).grid(row=idx, column=0, padx=6, pady=4, sticky="ew")
+
 
         self.accounts_scroll = customtkinter.CTkScrollableFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
         self.accounts_scroll.grid(row=3, column=0, padx=10, pady=(6, 4), sticky="nsew")
@@ -2172,9 +2174,22 @@ class App(customtkinter.CTk):
             return
         try:
             self.control_frame.sync_docked_windows_with_panel()
+            self.control_frame.raise_docked_windows()
         except Exception:
             pass
+    def _start_docked_windows_topmost_guard(self):
+        if self._dock_topmost_job:
+            return
+        self._dock_topmost_job = self.after(1000, self._refresh_docked_windows_topmost)
 
+    def _refresh_docked_windows_topmost(self):
+        self._dock_topmost_job = None
+        if self.state() != "iconic" and self.control_frame:
+            try:
+                self.control_frame.raise_docked_windows()
+            except Exception:
+                pass
+        self._dock_topmost_job = self.after(1000, self._refresh_docked_windows_topmost)
     def _on_main_window_configure(self, event):
         if event.widget is not self:
             return
@@ -2198,6 +2213,11 @@ class App(customtkinter.CTk):
             except Exception:
                 pass
         self._schedule_docked_windows_sync(delay_ms=120)
+
+    def _on_main_window_focus_in(self, event):
+        if event.widget is not self:
+            return
+        self._schedule_docked_windows_sync(delay_ms=20)
     def _action_launch_bes(self):
         if not self._ensure_license():
             return
@@ -3764,6 +3784,16 @@ class App(customtkinter.CTk):
         if self._section_switch_job is not None:
             try:
                 self.after_cancel(self._section_switch_job)
+            except Exception:
+                pass
+        if self._dock_sync_job is not None:
+            try:
+                self.after_cancel(self._dock_sync_job)
+            except Exception:
+                pass
+        if self._dock_topmost_job is not None:
+            try:
+                self.after_cancel(self._dock_topmost_job)
             except Exception:
                 pass
         try:
