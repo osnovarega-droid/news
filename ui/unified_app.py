@@ -968,6 +968,7 @@ class App(customtkinter.CTk):
         dashboard_view = customtkinter.CTkFrame(self.functional_views, fg_color="transparent")
         dashboard_view.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
         dashboard_view.grid_columnconfigure(0, weight=1)
+        dashboard_view.grid_rowconfigure(4, weight=1)
         self.dashboard_views = {"dashboard": dashboard_view}
 
         quick = customtkinter.CTkFrame(dashboard_view, fg_color="transparent")
@@ -1104,15 +1105,15 @@ class App(customtkinter.CTk):
         self._switch_tools_stack("lobby", "lobby")
         self._switch_dashboard_view("dashboard")
         self.accounts_info = customtkinter.CTkLabel(
-            controls_panel,
+            dashboard_view,
             text="Accounts: - | Selected: - | Launched: -",
             text_color=TXT_MUTED,
             font=customtkinter.CTkFont(size=12, weight="bold"),
             anchor="w",
         )
-        self.accounts_info.grid(row=2, column=0, padx=10, pady=(4, 0), sticky="ew")
-        self.accounts_scroll = customtkinter.CTkScrollableFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=6, border_width=0)
-        self.accounts_scroll.grid(row=3, column=0, padx=8, pady=(4, 6), sticky="nsew")
+        self.accounts_info.grid(row=3, column=0, padx=10, pady=(4, 0), sticky="ew")
+        self.accounts_scroll = customtkinter.CTkScrollableFrame(dashboard_view, fg_color=BG_CARD_ALT, corner_radius=6, border_width=0)
+        self.accounts_scroll.grid(row=4, column=0, padx=8, pady=(4, 6), sticky="nsew")
         self.accounts_scroll.grid_columnconfigure(0, weight=1)
         self._create_account_rows()
 
@@ -1149,22 +1150,12 @@ class App(customtkinter.CTk):
                 fg_color=ACCENT_PURPLE if is_active else inactive_color,
                 border_color=SWITCH_BORDER_ACTIVE if is_active else SWITCH_BORDER_INACTIVE,
             )
-        accounts_widgets = [
 
-            getattr(self, "accounts_scroll", None),
-        ]
         hidden_widgets = [
 
             getattr(self, "logs_box", None),
         ]
-        if view_name == "dashboard":
-            for widget in accounts_widgets:
-                if widget is not None:
-                    widget.grid()
-        else:
-            for widget in accounts_widgets:
-                if widget is not None:
-                    widget.grid_remove()
+
         for widget in hidden_widgets:
             if widget is not None:
                 widget.grid_remove()
