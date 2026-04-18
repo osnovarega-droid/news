@@ -199,9 +199,9 @@ class App(customtkinter.CTk):
         self.splash_progress = None
         self._startup_services_initializer = startup_services_initializer
         
-        self.geometry("1750x1080")
-        self.minsize(1750, 1080)
-        self.maxsize(1750, 1080)
+        self.geometry("1750x973")
+        self.minsize(1750, 973)
+        self.maxsize(1750, 973)
         self.configure(fg_color=BG_MAIN)
         self.withdraw()
 
