@@ -1006,11 +1006,11 @@ class App(customtkinter.CTk):
 
         extra_tools = customtkinter.CTkFrame(tools_stack, fg_color="transparent")
         extra_tools.grid(row=0, column=0, padx=0, pady=0, sticky="ew")
-        extra_tools.grid_columnconfigure(0, weight=1)
-        customtkinter.CTkButton(extra_tools, text="Move all cs windows", command=self._action_move_all_cs_windows, fg_color=ACCENT_GREEN, hover_color="#177844", **button_style).grid(row=0, column=0, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(extra_tools, text="Kill all cs & steam", command=self._action_kill_all_cs_and_steam, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=1, column=0, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(extra_tools, text="Send trade", command=self._action_send_trade_selected, fg_color=ACCENT_GREEN, hover_color="#177844", **button_style).grid(row=2, column=0, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(extra_tools, text="Settings trade", command=self.config_tab.open_looter_settings, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=3, column=0, padx=4, pady=(4, 6), sticky="ew")
+        extra_tools.grid_columnconfigure((0, 1), weight=1)
+        customtkinter.CTkButton(extra_tools, text="Move all cs windows", command=self._action_move_all_cs_windows, fg_color=ACCENT_GREEN, hover_color="#177844", **button_style).grid(row=0, column=0, padx=(4, 2), pady=4, sticky="ew")
+        customtkinter.CTkButton(extra_tools, text="Kill all cs & steam", command=self._action_kill_all_cs_and_steam, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=0, column=1, padx=(2, 4), pady=4, sticky="ew")
+        customtkinter.CTkButton(extra_tools, text="Send trade", command=self._action_send_trade_selected, fg_color=ACCENT_GREEN, hover_color="#177844", **button_style).grid(row=1, column=0, padx=(4, 2), pady=(4, 6), sticky="ew")
+        customtkinter.CTkButton(extra_tools, text="Settings trade", command=self.config_tab.open_looter_settings, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=1, column=1, padx=(2, 4), pady=(4, 6), sticky="ew")
         self.tools_sections["tools"]["extra"] = extra_tools
 
         tools2 = customtkinter.CTkFrame(tools_stack, fg_color="transparent")
@@ -1118,16 +1118,16 @@ class App(customtkinter.CTk):
         self._create_account_rows()
 
         self.logs_box = customtkinter.CTkTextbox(
-            controls_panel,
+            dashboard_view,
             fg_color="#0e1428",
             text_color="#98a7cf",
             border_width=0,
             corner_radius=6,
             wrap="word",
             font=customtkinter.CTkFont(size=11),
-            height=78,
+            height=140,
         )
-        self.logs_box.grid_remove()
+        self.logs_box.grid(row=5, column=0, padx=8, pady=(2, 8), sticky="ew")
         self.log_manager.textbox = self.logs_box
         self._update_accounts_info()
 
@@ -1151,14 +1151,12 @@ class App(customtkinter.CTk):
                 border_color=SWITCH_BORDER_ACTIVE if is_active else SWITCH_BORDER_INACTIVE,
             )
 
-        hidden_widgets = [
-
-            getattr(self, "logs_box", None),
-        ]
-
-        for widget in hidden_widgets:
-            if widget is not None:
-                widget.grid_remove()
+        logs_box = getattr(self, "logs_box", None)
+        if logs_box is not None:
+            if view_name == "dashboard":
+                logs_box.grid(row=5, column=0, padx=8, pady=(2, 8), sticky="ew")
+            else:
+                logs_box.grid_remove()
     def _switch_tools_stack(self, group_name, section_name):
         group = getattr(self, "tools_sections", {}).get(group_name, {})
         for key, frame in group.items():
