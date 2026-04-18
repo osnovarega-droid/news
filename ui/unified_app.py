@@ -915,67 +915,77 @@ class App(customtkinter.CTk):
         controls_panel = customtkinter.CTkFrame(body, fg_color=BG_CARD, corner_radius=0, border_width=0)
         controls_panel.grid(row=0, column=1, sticky="nsew")
         controls_panel.grid_columnconfigure(0, weight=1)
-        controls_panel.grid_rowconfigure(4, weight=2)
-        controls_panel.grid_rowconfigure(5, weight=1)
+        controls_panel.grid_rowconfigure(4, weight=1)
+        controls_panel.grid_rowconfigure(5, weight=0, minsize=120)
 
-        quick = customtkinter.CTkFrame(controls_panel, fg_color="transparent")
-        quick.grid(row=0, column=0, padx=10, pady=(10, 6), sticky="ew")
-        for i in range(2):
-            quick.grid_columnconfigure(i, weight=1)
+
         button_style = {
-            "height": 36,
+            "height": 34,
             "corner_radius": 6,
             "border_width": 1,
-            "border_color": "#3a4566",
+            "border_color": "#2f3d63",
             "font": customtkinter.CTkFont(size=12, weight="bold"),
         }
-        customtkinter.CTkButton(quick, text="Select 4 accs", command=self._action_select_first_4, fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=0, padx=3, pady=3, sticky="ew")
-        customtkinter.CTkButton(quick, text="Select all", command=self._action_select_all_toggle, fg_color=BG_CARD_ALT, hover_color=BG_BORDER, **button_style).grid(row=0, column=1, padx=3, pady=3, sticky="ew")
-        customtkinter.CTkButton(quick, text="Launch selected", command=self._action_start_selected, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, **button_style).grid(row=1, column=0, padx=3, pady=3, sticky="ew")
-        customtkinter.CTkButton(quick, text="Kill selected", command=self._action_kill_selected, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=1, column=1, padx=3, pady=3, sticky="ew")
-        customtkinter.CTkButton(quick, text="Move all CS windows", command=self._action_move_all_cs_windows, fg_color=ACCENT_GREEN, hover_color="#177844", **button_style).grid(row=2, column=0, columnspan=2, padx=3, pady=3, sticky="ew")
+        top_tabs = customtkinter.CTkFrame(controls_panel, fg_color="transparent")
+        top_tabs.grid(row=0, column=0, padx=10, pady=(10, 4), sticky="ew")
+        top_tabs.grid_columnconfigure((0, 1), weight=1)
+        customtkinter.CTkButton(top_tabs, text="Dashboard", fg_color=ACCENT_PURPLE, hover_color="#30395e", **button_style).grid(row=0, column=0, padx=(0, 4), pady=(0, 6), sticky="ew")
+        customtkinter.CTkButton(top_tabs, text="Configurations", command=self._action_open_add_game_library_popup, fg_color=BG_CARD_ALT, hover_color=BG_BORDER, **button_style).grid(row=0, column=1, padx=(4, 0), pady=(0, 6), sticky="ew")
 
-        lobby = customtkinter.CTkFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=6, border_width=0)
-        lobby.grid(row=1, column=0, padx=8, pady=4, sticky="ew")
+        quick = customtkinter.CTkFrame(top_tabs, fg_color="transparent")
+        quick.grid(row=1, column=0, columnspan=2, sticky="ew")
+        quick.grid_columnconfigure((0, 1), weight=1)
+        customtkinter.CTkButton(quick, text="Select 4 accs", command=self._action_select_first_4, fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=0, padx=(0, 4), pady=3, sticky="ew")
+        customtkinter.CTkButton(quick, text="Select all accs", command=self._action_select_all_toggle, fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=1, padx=(4, 0), pady=3, sticky="ew")
+        customtkinter.CTkButton(quick, text="Launch selected", command=self._action_start_selected, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, **button_style).grid(row=1, column=0, columnspan=2, padx=0, pady=4, sticky="ew")
+        customtkinter.CTkButton(quick, text="Kill selected", command=self._action_kill_selected, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=2, column=0, columnspan=2, padx=0, pady=4, sticky="ew")
+
+        tools = customtkinter.CTkFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
+        tools.grid(row=1, column=0, padx=10, pady=4, sticky="ew")
+        tools.grid_columnconfigure(0, weight=1)
+
+        tools_header = customtkinter.CTkFrame(tools, fg_color="transparent")
+        tools_header.grid(row=0, column=0, padx=4, pady=(4, 2), sticky="ew")
+        tools_header.grid_columnconfigure((0, 1), weight=1)
+        customtkinter.CTkButton(tools_header, text="Extra tools 1", fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=0, padx=(0, 4), pady=0, sticky="ew")
+        customtkinter.CTkButton(tools_header, text="Tools 2  ⌄", command=self._action_open_add_game_library_popup, fg_color=BG_CARD_ALT, hover_color=BG_BORDER, **button_style).grid(row=0, column=1, padx=(4, 0), pady=0, sticky="ew")
+
+        customtkinter.CTkButton(tools, text="Move all CS windows", command=self._action_move_all_cs_windows, fg_color=ACCENT_GREEN, hover_color="#177844", **button_style).grid(row=1, column=0, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(tools, text="Kill ALL CS & Steam", command=self._action_kill_all_cs_and_steam, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=2, column=0, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(tools, text="Send trade", command=self._action_send_trade_selected, fg_color=ACCENT_GREEN, hover_color="#177844", **button_style).grid(row=3, column=0, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(tools, text="Settings trade", command=self.config_tab.open_looter_settings, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=4, column=0, padx=4, pady=(4, 6), sticky="ew")
 
         lobby = customtkinter.CTkFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
-        lobby.grid(row=1, column=0, padx=10, pady=6, sticky="ew")
+        lobby.grid(row=2, column=0, padx=10, pady=4, sticky="ew")
         lobby.grid_columnconfigure(0, weight=1)
+        lobby_header = customtkinter.CTkFrame(lobby, fg_color="transparent")
+        lobby_header.grid(row=0, column=0, padx=4, pady=(4, 2), sticky="ew")
+        lobby_header.grid_columnconfigure((0, 1), weight=1)
+        customtkinter.CTkButton(lobby_header, text="Lobby management", fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=0, padx=(0, 4), pady=0, sticky="ew")
+        customtkinter.CTkButton(lobby_header, text="Tools  ⌄", fg_color=BG_CARD_ALT, hover_color=BG_BORDER, **button_style).grid(row=0, column=1, padx=(4, 0), pady=0, sticky="ew")
 
         lobby_buttons = [
             ("Make Lobbies", self._action_make_lobbies, BG_CARD),
-            ("Make Lobbies & Search", self._action_make_lobbies_and_search, ACCENT_BLUE),
+
             ("Disband lobbies", self._action_disband_lobbies, BG_CARD),
-            ("Shuffle Lobbies", self._action_shuffle_lobbies, BG_CARD),
+            ("Shuffle lobbies", self._action_shuffle_lobbies, BG_CARD),
+            ("Make Lobbies & Search Game", self._action_make_lobbies_and_search, ACCENT_BLUE),
         ]
-        for idx, (text, cmd, color) in enumerate(lobby_buttons):
+        for idx, (text, cmd, color) in enumerate(lobby_buttons, start=1):
             btn = customtkinter.CTkButton(lobby, text=text, command=cmd, fg_color=color, hover_color=BG_BORDER, **button_style)
             btn.grid(row=idx, column=0, padx=4, pady=3, sticky="ew")
             self.lobby_buttons[text] = btn
-        tools = customtkinter.CTkFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=6, border_width=0)
-        tools.grid(row=2, column=0, padx=8, pady=4, sticky="ew")
-        tools.grid_columnconfigure(0, weight=1)
-        tool_buttons = [
-            ("Launch steam", self._action_launch_steam_selected, ACCENT_BLUE),
-            ("Start booster", self._action_start_booster_selected, ACCENT_GREEN),
-            ("Stop booster", self._action_stop_booster_selected, ACCENT_RED),
-            ("Add game library", self._action_open_add_game_library_popup, ACCENT_PURPLE),
-            ("Kill ALL CS & Steam", self._action_kill_all_cs_and_steam, BG_CARD),
-            ("Send trade", self._action_send_trade_selected, ACCENT_GREEN),
-        ]
-        for idx, (text, cmd, color) in enumerate(tool_buttons):
-            customtkinter.CTkButton(tools, text=text, command=cmd, fg_color=color, hover_color=BG_BORDER, **button_style).grid(row=idx, column=0, padx=4, pady=3, sticky="ew")
 
         self.accounts_info = customtkinter.CTkLabel(
             controls_panel,
             text="0 accounts • 0 selected • 0 launched",
             text_color=TXT_MUTED,
-            font=customtkinter.CTkFont(size=12),
+            font=customtkinter.CTkFont(size=12, weight="bold"),
             anchor="w",
         )
-        self.accounts_info.grid(row=3, column=0, padx=12, pady=(2, 2), sticky="ew")
+        self.accounts_info.grid(row=3, column=0, padx=12, pady=(4, 2), sticky="ew")
         self.accounts_scroll = customtkinter.CTkScrollableFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=6, border_width=0)
-        self.accounts_scroll.grid(row=4, column=0, padx=8, pady=(2, 3), sticky="nsew")
+        self.accounts_scroll.grid(row=4, column=0, padx=8, pady=(2, 4), sticky="nsew")
         self.accounts_scroll.grid_columnconfigure(0, weight=1)
         self._create_account_rows()
 
@@ -987,6 +997,7 @@ class App(customtkinter.CTk):
             corner_radius=6,
             wrap="word",
             font=customtkinter.CTkFont(size=11),
+            height=118,
         )
         self.logs_box.grid(row=5, column=0, padx=8, pady=(3, 6), sticky="nsew")
         self.log_manager.textbox = self.logs_box
