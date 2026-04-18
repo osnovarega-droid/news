@@ -63,6 +63,8 @@ REGION_PING_TARGETS = {}
 WEEKLY_RESET_WEEKDAY = 2  # Wednesday
 WEEKLY_RESET_HOUR = 3
 APP_ICON_CANDIDATES = ("Icon2.ico", "Icon1.ico")
+SWITCH_BORDER_ACTIVE = ACCENT_GREEN
+SWITCH_BORDER_INACTIVE = ACCENT_RED
 
 class SteamRouteManager:
     """Manages Windows Firewall rules for Steam SDR regional routing."""
@@ -1146,8 +1148,20 @@ class App(customtkinter.CTk):
             inactive_color = getattr(self, "_dashboard_inactive_colors", {}).get(key, BG_CARD_ALT)
             button.configure(
                 fg_color=ACCENT_PURPLE if is_active else inactive_color,
-                border_color="#4f5f8f" if is_active else "#2f3d63",
+                border_color=SWITCH_BORDER_ACTIVE if is_active else SWITCH_BORDER_INACTIVE,
             )
+        accounts_widgets = [
+            getattr(self, "accounts_info", None),
+            getattr(self, "accounts_scroll", None),
+        ]
+        if view_name == "dashboard":
+            for widget in accounts_widgets:
+                if widget is not None:
+                    widget.grid()
+        else:
+            for widget in accounts_widgets:
+                if widget is not None:
+                    widget.grid_remove()
 
     def _switch_tools_stack(self, group_name, section_name):
         group = getattr(self, "tools_sections", {}).get(group_name, {})
@@ -1167,7 +1181,7 @@ class App(customtkinter.CTk):
             is_active = key == section_name
             button.configure(
                 fg_color=ACCENT_PURPLE if is_active else inactive_colors.get(key, BG_CARD_ALT),
-                border_color="#4f5f8f" if is_active else "#2f3d63",
+                border_color=SWITCH_BORDER_ACTIVE if is_active else SWITCH_BORDER_INACTIVE,
             )
     def _action_save_steam_path(self):
         entry = getattr(self, "config_steam_path_entry", None)
@@ -1177,7 +1191,11 @@ class App(customtkinter.CTk):
         if not new_path:
             self.log_manager.add_log("❌ Steam path пустой")
             return
-        self.settings_manager.set("SteamPath", new_path)
+        normalized_path = self._validate_steam_path(new_path)
+        if not normalized_path:
+            self.log_manager.add_log("❌ Steam path некорректный: укажите Steam.exe или папку, где он находится")
+            return
+        self.settings_manager.set("SteamPath", normalized_path)
         self.log_manager.add_log("✅ Steam path сохранен")
 
     def _action_save_cs2_path(self):
@@ -1188,7 +1206,11 @@ class App(customtkinter.CTk):
         if not new_path:
             self.log_manager.add_log("❌ CS2 path пустой")
             return
-        self.settings_manager.set("CS2Path", new_path)
+        normalized_path = self._validate_cs2_path(new_path)
+        if not normalized_path:
+            self.log_manager.add_log("❌ CS2 path некорректный: не найдена папка CS2 (game/csgo или csgo)")
+            return
+        self.settings_manager.set("CS2Path", normalized_path)
         self.log_manager.add_log("✅ CS2 path сохранен")
 
     def _action_open_steam_path_popup(self):
@@ -1204,7 +1226,11 @@ class App(customtkinter.CTk):
         if not new_path:
             self.log_manager.add_log("❌ Steam path пустой")
             return
-        self.settings_manager.set("SteamPath", new_path)
+        normalized_path = self._validate_steam_path(new_path)
+        if not normalized_path:
+            self.log_manager.add_log("❌ Steam path некорректный: укажите Steam.exe или папку, где он находится")
+            return
+        self.settings_manager.set("SteamPath", normalized_path)
         self.log_manager.add_log("✅ Steam path сохранен")
 
     def _action_open_cs2_path_popup(self):
@@ -1220,8 +1246,45 @@ class App(customtkinter.CTk):
         if not new_path:
             self.log_manager.add_log("❌ CS2 path пустой")
             return
-        self.settings_manager.set("CS2Path", new_path)
+        normalized_path = self._validate_cs2_path(new_path)
+        if not normalized_path:
+            self.log_manager.add_log("❌ CS2 path некорректный: не найдена папка CS2 (game/csgo или csgo)")
+            return
+        self.settings_manager.set("CS2Path", normalized_path)
         self.log_manager.add_log("✅ CS2 path сохранен")
+
+    def _validate_steam_path(self, steam_path):
+        candidate = (steam_path or "").strip().strip('"')
+        if not candidate:
+            return None
+
+        if os.path.isfile(candidate):
+            if os.path.basename(candidate).lower() == "steam.exe":
+                return candidate
+            return None
+
+        if os.path.isdir(candidate):
+            steam_exe = os.path.join(candidate, "Steam.exe")
+            if os.path.isfile(steam_exe):
+                return steam_exe
+
+        return None
+
+    def _validate_cs2_path(self, cs2_path):
+        candidate = (cs2_path or "").strip().strip('"')
+        if not candidate or not os.path.isdir(candidate):
+            return None
+
+        cs2_dir_markers = [
+            os.path.join(candidate, "game", "csgo"),
+            os.path.join(candidate, "csgo"),
+        ]
+        for marker in cs2_dir_markers:
+            if os.path.isdir(marker):
+                return candidate
+
+        return None
+        
 
     def _sort_accounts_by_metric(self, metric):
         if metric not in {"level", "xp"}:
