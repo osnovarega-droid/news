@@ -917,8 +917,7 @@ class App(customtkinter.CTk):
         controls_panel = customtkinter.CTkFrame(body, fg_color=BG_CARD, corner_radius=0, border_width=0)
         controls_panel.grid(row=0, column=1, sticky="nsew")
         controls_panel.grid_columnconfigure(0, weight=1)
-        controls_panel.grid_rowconfigure(4, weight=1)
-        controls_panel.grid_rowconfigure(5, weight=0, minsize=82)
+        controls_panel.grid_rowconfigure(3, weight=1)
 
 
         button_style = {
@@ -1111,9 +1110,9 @@ class App(customtkinter.CTk):
             font=customtkinter.CTkFont(size=12, weight="bold"),
             anchor="w",
         )
-        self.accounts_info.grid(row=3, column=0, padx=12, pady=(4, 2), sticky="ew")
+
         self.accounts_scroll = customtkinter.CTkScrollableFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=6, border_width=0)
-        self.accounts_scroll.grid(row=4, column=0, padx=8, pady=(2, 4), sticky="nsew")
+        self.accounts_scroll.grid(row=3, column=0, padx=8, pady=(4, 6), sticky="nsew")
         self.accounts_scroll.grid_columnconfigure(0, weight=1)
         self._create_account_rows()
 
@@ -1127,7 +1126,7 @@ class App(customtkinter.CTk):
             font=customtkinter.CTkFont(size=11),
             height=78,
         )
-        self.logs_box.grid(row=5, column=0, padx=8, pady=(3, 6), sticky="nsew")
+        self.logs_box.grid_remove()
         self.log_manager.textbox = self.logs_box
         self._update_accounts_info()
 
@@ -1151,8 +1150,12 @@ class App(customtkinter.CTk):
                 border_color=SWITCH_BORDER_ACTIVE if is_active else SWITCH_BORDER_INACTIVE,
             )
         accounts_widgets = [
-            getattr(self, "accounts_info", None),
+
             getattr(self, "accounts_scroll", None),
+        ]
+        hidden_widgets = [
+            getattr(self, "accounts_info", None),
+            getattr(self, "logs_box", None),
         ]
         if view_name == "dashboard":
             for widget in accounts_widgets:
@@ -1162,7 +1165,9 @@ class App(customtkinter.CTk):
             for widget in accounts_widgets:
                 if widget is not None:
                     widget.grid_remove()
-
+        for widget in hidden_widgets:
+            if widget is not None:
+                widget.grid_remove()
     def _switch_tools_stack(self, group_name, section_name):
         group = getattr(self, "tools_sections", {}).get(group_name, {})
         for key, frame in group.items():
