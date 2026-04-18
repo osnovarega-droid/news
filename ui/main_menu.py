@@ -11,11 +11,12 @@ from Modules.AutoAcceptModule import AutoAcceptModule
 
 
 class MainMenu(customtkinter.CTkTabview):
-    def __init__(self, parent):
+    def __init__(self, parent, render_ui=True):
         super().__init__(parent, width=250)
-        self.grid(row=0, column=2, padx=(20, 0), pady=(0, 0), sticky="nsew")
-
-        self._create_main_tab()
+        self._render_ui = render_ui
+        if render_ui:
+            self.grid(row=0, column=2, padx=(20, 0), pady=(0, 0), sticky="nsew")
+            self._create_main_tab()
 
         self._logManager = LogManager()
         self._accountManager = AccountManager()
@@ -29,14 +30,17 @@ class MainMenu(customtkinter.CTkTabview):
             self.auto_accept_module.start() 
             print("🚀 AutoAcceptModule: АВТОЗАПУСК ✓") 
 
-        self._create_buttons([
-            ("Make lobbies", "darkgreen", self.make_lobbies),
-            ("Disband lobbies", "darkblue", self.disband_lobbies),
-            ("Shuffle lobbies", "darkblue", self.shuffle_lobbies),
-            ("Make lobbies & Search game", "purple", self.make_lobbies_and_search_game),
-        ])
+        self.buttons = {}
+        self.toggles = {}
+        if render_ui:
+            self._create_buttons([
+                ("Make lobbies", "darkgreen", self.make_lobbies),
+                ("Disband lobbies", "darkblue", self.disband_lobbies),
+                ("Shuffle lobbies", "darkblue", self.shuffle_lobbies),
+                ("Make lobbies & Search game", "purple", self.make_lobbies_and_search_game),
+            ])
 
-        self._create_toggle("Auto Accept Game", self.toggle_auto_accept, default_value=auto_accept_enabled)
+            self._create_toggle("Auto Accept Game", self.toggle_auto_accept, default_value=auto_accept_enabled)
 
         self._cancel_requested = False
         self._hotkey_registered = False
@@ -213,6 +217,9 @@ class MainMenu(customtkinter.CTkTabview):
     # Button actions
     # -----------------------------
     def make_lobbies(self):
+        if not self._render_ui:
+            self._lobbyManager.CollectLobby()
+            return
         self.run_with_countdown_on_button(
             button_text="Make lobbies",
             action=self._lobbyManager.CollectLobby,
@@ -223,6 +230,9 @@ class MainMenu(customtkinter.CTkTabview):
         )
 
     def disband_lobbies(self):
+        if not self._render_ui:
+            self._lobbyManager.DisbandLobbies()
+            return
         self.run_with_countdown_on_button(
             button_text="Disband lobbies",
             action=self._lobbyManager.DisbandLobbies,
@@ -233,6 +243,9 @@ class MainMenu(customtkinter.CTkTabview):
         )
 
     def shuffle_lobbies(self):
+        if not self._render_ui:
+            self._lobbyManager.Shuffle()
+            return
 
         self.run_with_countdown_on_button(
             button_text="Shuffle lobbies",
@@ -244,6 +257,9 @@ class MainMenu(customtkinter.CTkTabview):
         )
 
     def make_lobbies_and_search_game(self):
+        if not self._render_ui:
+            self._lobbyManager.MakeLobbiesAndSearchGame()
+            return
         self.run_with_countdown_on_button(
             button_text="Make lobbies & Search game",
             action=self._lobbyManager.MakeLobbiesAndSearchGame,
