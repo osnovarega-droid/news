@@ -929,53 +929,153 @@ class App(customtkinter.CTk):
         top_tabs = customtkinter.CTkFrame(controls_panel, fg_color="transparent")
         top_tabs.grid(row=0, column=0, padx=10, pady=(10, 4), sticky="ew")
         top_tabs.grid_columnconfigure((0, 1), weight=1)
-        customtkinter.CTkButton(top_tabs, text="Dashboard", fg_color=ACCENT_PURPLE, hover_color="#30395e", **button_style).grid(row=0, column=0, padx=(0, 4), pady=(0, 6), sticky="ew")
-        customtkinter.CTkButton(top_tabs, text="Configurations", command=self._action_open_add_game_library_popup, fg_color=BG_CARD_ALT, hover_color=BG_BORDER, **button_style).grid(row=0, column=1, padx=(4, 0), pady=(0, 6), sticky="ew")
 
-        quick = customtkinter.CTkFrame(top_tabs, fg_color="transparent")
-        quick.grid(row=1, column=0, columnspan=2, sticky="ew")
+        self.dashboard_switch_buttons = {}
+        self.dashboard_switch_buttons["dashboard"] = customtkinter.CTkButton(
+            top_tabs,
+            text="Dashboard",
+            command=lambda: self._switch_dashboard_view("dashboard"),
+            fg_color=ACCENT_PURPLE,
+            hover_color="#30395e",
+            **button_style,
+        )
+        self.dashboard_switch_buttons["dashboard"].grid(row=0, column=0, padx=(0, 4), pady=(0, 6), sticky="ew")
+        self.dashboard_switch_buttons["configurations"] = customtkinter.CTkButton(
+            top_tabs,
+            text="Configurations",
+            command=lambda: self._switch_dashboard_view("configurations"),
+            fg_color=BG_CARD_ALT,
+            hover_color=BG_BORDER,
+            **button_style,
+        )
+        self.dashboard_switch_buttons["configurations"].grid(row=0, column=1, padx=(4, 0), pady=(0, 6), sticky="ew")
+
+        self.functional_views = customtkinter.CTkFrame(controls_panel, fg_color="transparent")
+        self.functional_views.grid(row=1, column=0, padx=0, pady=0, sticky="nsew")
+        self.functional_views.grid_columnconfigure(0, weight=1)
+        self.functional_views.grid_rowconfigure(0, weight=1)
+
+        dashboard_view = customtkinter.CTkFrame(self.functional_views, fg_color="transparent")
+        dashboard_view.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
+        dashboard_view.grid_columnconfigure(0, weight=1)
+        self.dashboard_views = {"dashboard": dashboard_view}
+
+        quick = customtkinter.CTkFrame(dashboard_view, fg_color="transparent")
+        quick.grid(row=0, column=0, padx=10, pady=(0, 4), sticky="ew")
         quick.grid_columnconfigure((0, 1), weight=1)
         customtkinter.CTkButton(quick, text="Select 4 accs", command=self._action_select_first_4, fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=0, padx=(0, 4), pady=3, sticky="ew")
-        customtkinter.CTkButton(quick, text="Select all accs", command=self._action_select_all_toggle, fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=1, padx=(4, 0), pady=3, sticky="ew")
-        customtkinter.CTkButton(quick, text="Launch selected", command=self._action_start_selected, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, **button_style).grid(row=1, column=0, columnspan=2, padx=0, pady=4, sticky="ew")
+
+        customtkinter.CTkButton(quick, text="Select all cs", command=self._action_select_all_toggle, fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=1, padx=(4, 0), pady=3, sticky="ew")
+        customtkinter.CTkButton(quick, text="Lunch selected", command=self._action_start_selected, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, **button_style).grid(row=1, column=0, columnspan=2, padx=0, pady=4, sticky="ew")
         customtkinter.CTkButton(quick, text="Kill selected", command=self._action_kill_selected, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=2, column=0, columnspan=2, padx=0, pady=4, sticky="ew")
 
-        tools = customtkinter.CTkFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
+        tools = customtkinter.CTkFrame(dashboard_view, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
         tools.grid(row=1, column=0, padx=10, pady=4, sticky="ew")
         tools.grid_columnconfigure(0, weight=1)
+        tools.grid_rowconfigure(1, weight=1)
 
+        self.tools_switch_buttons = {}
         tools_header = customtkinter.CTkFrame(tools, fg_color="transparent")
         tools_header.grid(row=0, column=0, padx=4, pady=(4, 2), sticky="ew")
         tools_header.grid_columnconfigure((0, 1), weight=1)
-        customtkinter.CTkButton(tools_header, text="Extra tools 1", fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=0, padx=(0, 4), pady=0, sticky="ew")
-        customtkinter.CTkButton(tools_header, text="Tools 2  ⌄", command=self._action_open_add_game_library_popup, fg_color=BG_CARD_ALT, hover_color=BG_BORDER, **button_style).grid(row=0, column=1, padx=(4, 0), pady=0, sticky="ew")
+        self.tools_switch_buttons["extra"] = customtkinter.CTkButton(tools_header, text="Extra tools", command=lambda: self._switch_tools_stack("tools", "extra"), fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style)
+        self.tools_switch_buttons["extra"].grid(row=0, column=0, padx=(0, 4), pady=0, sticky="ew")
+        self.tools_switch_buttons["tools2"] = customtkinter.CTkButton(tools_header, text="tools 2", command=lambda: self._switch_tools_stack("tools", "tools2"), fg_color=BG_CARD_ALT, hover_color=BG_BORDER, **button_style)
+        self.tools_switch_buttons["tools2"].grid(row=0, column=1, padx=(4, 0), pady=0, sticky="ew")
 
-        customtkinter.CTkButton(tools, text="Move all CS windows", command=self._action_move_all_cs_windows, fg_color=ACCENT_GREEN, hover_color="#177844", **button_style).grid(row=1, column=0, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(tools, text="Kill ALL CS & Steam", command=self._action_kill_all_cs_and_steam, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=2, column=0, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(tools, text="Send trade", command=self._action_send_trade_selected, fg_color=ACCENT_GREEN, hover_color="#177844", **button_style).grid(row=3, column=0, padx=4, pady=4, sticky="ew")
-        customtkinter.CTkButton(tools, text="Settings trade", command=self.config_tab.open_looter_settings, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=4, column=0, padx=4, pady=(4, 6), sticky="ew")
+        tools_stack = customtkinter.CTkFrame(tools, fg_color="transparent")
+        tools_stack.grid(row=1, column=0, padx=0, pady=0, sticky="ew")
+        tools_stack.grid_columnconfigure(0, weight=1)
+        tools_stack.grid_rowconfigure(0, weight=1)
+        self.tools_sections = {"tools": {}}
 
-        lobby = customtkinter.CTkFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
+        extra_tools = customtkinter.CTkFrame(tools_stack, fg_color="transparent")
+        extra_tools.grid(row=0, column=0, padx=0, pady=0, sticky="ew")
+        extra_tools.grid_columnconfigure(0, weight=1)
+        customtkinter.CTkButton(extra_tools, text="Move all cs windows", command=self._action_move_all_cs_windows, fg_color=ACCENT_GREEN, hover_color="#177844", **button_style).grid(row=0, column=0, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(extra_tools, text="Kill all cs & steam", command=self._action_kill_all_cs_and_steam, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=1, column=0, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(extra_tools, text="Send trade", command=self._action_send_trade_selected, fg_color=ACCENT_GREEN, hover_color="#177844", **button_style).grid(row=2, column=0, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(extra_tools, text="Settings trade", command=self.config_tab.open_looter_settings, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=3, column=0, padx=4, pady=(4, 6), sticky="ew")
+        self.tools_sections["tools"]["extra"] = extra_tools
+
+        tools2 = customtkinter.CTkFrame(tools_stack, fg_color="transparent")
+        tools2.grid(row=0, column=0, padx=0, pady=0, sticky="ew")
+        tools2.grid_columnconfigure(0, weight=1)
+        customtkinter.CTkButton(tools2, text="Launch steam", command=self._action_launch_steam_selected, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, **button_style).grid(row=0, column=0, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(tools2, text="Add game library", command=self._action_open_add_game_library_popup, fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=1, column=0, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(tools2, text="Start booster", command=self._action_start_booster_selected, fg_color=ACCENT_GREEN, hover_color="#177844", **button_style).grid(row=2, column=0, padx=4, pady=4, sticky="ew")
+        customtkinter.CTkButton(tools2, text="Stop booster", command=self._action_stop_booster_selected, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=3, column=0, padx=4, pady=(4, 6), sticky="ew")
+        self.tools_sections["tools"]["tools2"] = tools2
+
+        lobby = customtkinter.CTkFrame(dashboard_view, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
         lobby.grid(row=2, column=0, padx=10, pady=4, sticky="ew")
         lobby.grid_columnconfigure(0, weight=1)
         lobby_header = customtkinter.CTkFrame(lobby, fg_color="transparent")
         lobby_header.grid(row=0, column=0, padx=4, pady=(4, 2), sticky="ew")
         lobby_header.grid_columnconfigure((0, 1), weight=1)
-        customtkinter.CTkButton(lobby_header, text="Lobby management", fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=0, padx=(0, 4), pady=0, sticky="ew")
-        customtkinter.CTkButton(lobby_header, text="Tools  ⌄", fg_color=BG_CARD_ALT, hover_color=BG_BORDER, **button_style).grid(row=0, column=1, padx=(4, 0), pady=0, sticky="ew")
+
+        self.lobby_switch_buttons = {}
+        self.lobby_switch_buttons["lobby"] = customtkinter.CTkButton(lobby_header, text="Lobby managment", command=lambda: self._switch_tools_stack("lobby", "lobby"), fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style)
+        self.lobby_switch_buttons["lobby"].grid(row=0, column=0, padx=(0, 4), pady=0, sticky="ew")
+        self.lobby_switch_buttons["accs"] = customtkinter.CTkButton(lobby_header, text="tools accs", command=lambda: self._switch_tools_stack("lobby", "accs"), fg_color=BG_CARD_ALT, hover_color=BG_BORDER, **button_style)
+        self.lobby_switch_buttons["accs"].grid(row=0, column=1, padx=(4, 0), pady=0, sticky="ew")
+
+        lobby_stack = customtkinter.CTkFrame(lobby, fg_color="transparent")
+        lobby_stack.grid(row=1, column=0, padx=0, pady=0, sticky="ew")
+        lobby_stack.grid_columnconfigure(0, weight=1)
+        lobby_stack.grid_rowconfigure(0, weight=1)
+        self.tools_sections["lobby"] = {}
+
+        lobby_tools = customtkinter.CTkFrame(lobby_stack, fg_color="transparent")
+        lobby_tools.grid(row=0, column=0, padx=0, pady=0, sticky="ew")
+        lobby_tools.grid_columnconfigure((0, 1), weight=1)
 
         lobby_buttons = [
-            ("Make Lobbies", self._action_make_lobbies, BG_CARD),
-
-            ("Disband lobbies", self._action_disband_lobbies, BG_CARD),
-            ("Shuffle lobbies", self._action_shuffle_lobbies, BG_CARD),
-            ("Make Lobbies & Search Game", self._action_make_lobbies_and_search, ACCENT_BLUE),
+            ("Make lobbies", self._action_make_lobbies),
+            ("Disband lobbies", self._action_disband_lobbies),
+            ("Shuffle lobbies", self._action_shuffle_lobbies),
+            ("Make lobbies & start game", self._action_make_lobbies_and_search),
         ]
-        for idx, (text, cmd, color) in enumerate(lobby_buttons, start=1):
-            btn = customtkinter.CTkButton(lobby, text=text, command=cmd, fg_color=color, hover_color=BG_BORDER, **button_style)
-            btn.grid(row=idx, column=0, padx=4, pady=3, sticky="ew")
+        for idx, (text, cmd) in enumerate(lobby_buttons):
+            row, col = divmod(idx, 2)
+            btn = customtkinter.CTkButton(lobby_tools, text=text, command=cmd, fg_color=BG_CARD, hover_color=BG_BORDER, **button_style)
+            btn.grid(row=row, column=col, padx=4, pady=3, sticky="ew")
             self.lobby_buttons[text] = btn
 
+        self.tools_sections["lobby"]["lobby"] = lobby_tools
+
+        tools_accs = customtkinter.CTkFrame(lobby_stack, fg_color="transparent")
+        tools_accs.grid(row=0, column=0, padx=0, pady=0, sticky="ew")
+        tools_accs.grid_columnconfigure((0, 1), weight=1)
+        customtkinter.CTkButton(tools_accs, text="Short by lvl", command=lambda: self._sort_accounts_by_metric("level"), fg_color=BG_CARD, hover_color=BG_BORDER, **button_style).grid(row=0, column=0, padx=4, pady=3, sticky="ew")
+        customtkinter.CTkButton(tools_accs, text="Short by xp", command=lambda: self._sort_accounts_by_metric("xp"), fg_color=BG_CARD, hover_color=BG_BORDER, **button_style).grid(row=0, column=1, padx=4, pady=3, sticky="ew")
+        customtkinter.CTkButton(tools_accs, text="Get level", command=self._action_try_get_level, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, **button_style).grid(row=1, column=0, padx=4, pady=3, sticky="ew")
+        customtkinter.CTkButton(tools_accs, text="Get wingman rank", command=self._action_try_get_wingman_rank, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, **button_style).grid(row=1, column=1, padx=4, pady=3, sticky="ew")
+        self.tools_sections["lobby"]["accs"] = tools_accs
+
+        config_view = customtkinter.CTkFrame(self.functional_views, fg_color="transparent")
+        config_view.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
+        config_view.grid_columnconfigure(0, weight=1)
+        config_view.grid_rowconfigure(1, weight=1)
+        self.dashboard_views["configurations"] = config_view
+
+        config_header = customtkinter.CTkFrame(config_view, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
+        config_header.grid(row=0, column=0, padx=10, pady=(0, 6), sticky="ew")
+        config_header.grid_columnconfigure((0, 1), weight=1)
+        customtkinter.CTkButton(config_header, text="Steam path", command=self._action_open_steam_path_popup, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, **button_style).grid(row=0, column=0, padx=6, pady=6, sticky="ew")
+        customtkinter.CTkButton(config_header, text="CS patch", command=self._action_open_cs2_path_popup, fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=1, padx=6, pady=6, sticky="ew")
+
+        config_switches = customtkinter.CTkFrame(config_view, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
+        config_switches.grid(row=1, column=0, padx=10, pady=(0, 4), sticky="nsew")
+        config_switches.grid_columnconfigure(0, weight=1)
+        self.config_toggle_auto_accept = self._create_labeled_switch(config_switches, row=1, title="Auto accept game", description="Автоматически принимает матч.", setting_key="AutoAcceptEnabled", on_toggle=self._on_auto_accept_toggle, default=True)
+        self.config_toggle_auto_match = self._create_labeled_switch(config_switches, row=2, title="Auto match in start", description="После запуска начинает поиск игры.", setting_key="AutoMatchInStartEnabled", on_toggle=self._on_auto_match_toggle, default=True)
+        self.config_toggle_auto_account_switching = self._create_labeled_switch(config_switches, row=3, title="Automatic account switching", description="Автоматическая смена аккаунтов после отфарма.", setting_key="AutomaticAccountSwitchingEnabled", on_toggle=self._on_auto_account_switching_toggle, default=True)
+        self.config_toggle_manual_farm = self._create_labeled_switch(config_switches, row=4, title="Manual farm", description="Отключает авто-логику и оставляет только ручные действия.", setting_key="ManualFarmEnabled", on_toggle=self._on_manual_farm_toggle, default=False)
+
+        self._switch_tools_stack("tools", "extra")
+        self._switch_tools_stack("lobby", "lobby")
+        self._switch_dashboard_view("dashboard")
         self.accounts_info = customtkinter.CTkLabel(
             controls_panel,
             text="0 accounts • 0 selected • 0 launched",
@@ -1009,6 +1109,84 @@ class App(customtkinter.CTk):
         for name, frame in getattr(self, "tools_sections", {}).items():
             if name == section_name:
                 frame.tkraise()
+
+    def _switch_dashboard_view(self, view_name):
+        for key, frame in getattr(self, "dashboard_views", {}).items():
+            if key == view_name:
+                frame.tkraise()
+
+        for key, button in getattr(self, "dashboard_switch_buttons", {}).items():
+            is_active = key == view_name
+            button.configure(
+                fg_color=ACCENT_PURPLE if is_active else BG_CARD_ALT,
+                border_color="#4f5f8f" if is_active else "#2f3d63",
+            )
+
+    def _switch_tools_stack(self, group_name, section_name):
+        group = getattr(self, "tools_sections", {}).get(group_name, {})
+        for key, frame in group.items():
+            if key == section_name:
+                frame.tkraise()
+
+        buttons_map = {
+            "tools": getattr(self, "tools_switch_buttons", {}),
+            "lobby": getattr(self, "lobby_switch_buttons", {}),
+        }.get(group_name, {})
+        for key, button in buttons_map.items():
+            is_active = key == section_name
+            button.configure(
+                fg_color=ACCENT_PURPLE if is_active else BG_CARD_ALT,
+                border_color="#4f5f8f" if is_active else "#2f3d63",
+            )
+
+    def _action_open_steam_path_popup(self):
+        current_path = self.settings_manager.get("SteamPath", "") or ""
+        dialog = customtkinter.CTkInputDialog(
+            title="Steam path",
+            text=f"Введите путь до steam.exe\nТекущее значение:\n{current_path}",
+        )
+        new_path = dialog.get_input()
+        if new_path is None:
+            return
+        new_path = new_path.strip()
+        if not new_path:
+            self.log_manager.add_log("❌ Steam path пустой")
+            return
+        self.settings_manager.set("SteamPath", new_path)
+        self.log_manager.add_log("✅ Steam path сохранен")
+
+    def _action_open_cs2_path_popup(self):
+        current_path = self.settings_manager.get("CS2Path", "") or ""
+        dialog = customtkinter.CTkInputDialog(
+            title="CS2 path",
+            text=f"Введите путь до папки CS2\nТекущее значение:\n{current_path}",
+        )
+        new_path = dialog.get_input()
+        if new_path is None:
+            return
+        new_path = new_path.strip()
+        if not new_path:
+            self.log_manager.add_log("❌ CS2 path пустой")
+            return
+        self.settings_manager.set("CS2Path", new_path)
+        self.log_manager.add_log("✅ CS2 path сохранен")
+
+    def _sort_accounts_by_metric(self, metric):
+        if metric not in {"level", "xp"}:
+            return
+
+        def metric_value(account):
+            info = self.levels_cache.get(account.login, self.levels_cache.get(account.login.lower(), {}))
+            value = info.get(metric)
+            try:
+                return int(value)
+            except Exception:
+                return -1
+
+        self.account_manager.accounts.sort(key=metric_value, reverse=True)
+        self._create_account_rows()
+        self._safe_ui_refresh()
+        self.log_manager.add_log(f"🔃 Accounts sorted by {metric}")
     def _create_account_rows(self):
         scroll_pos = self._get_accounts_scroll_position()
         self.account_row_items.clear()
