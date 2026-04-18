@@ -916,7 +916,7 @@ class App(customtkinter.CTk):
         controls_panel.grid(row=0, column=1, sticky="nsew")
         controls_panel.grid_columnconfigure(0, weight=1)
         controls_panel.grid_rowconfigure(4, weight=1)
-        controls_panel.grid_rowconfigure(5, weight=0, minsize=120)
+        controls_panel.grid_rowconfigure(5, weight=0, minsize=82)
 
 
         button_style = {
@@ -926,6 +926,12 @@ class App(customtkinter.CTk):
             "border_color": "#2f3d63",
             "font": customtkinter.CTkFont(size=12, weight="bold"),
         }
+        segment_button_style = {
+            "height": 38,
+            "corner_radius": 12,
+            "border_width": 2,
+            "font": customtkinter.CTkFont(size=12, weight="bold"),
+        }
         top_tabs = customtkinter.CTkFrame(controls_panel, fg_color="transparent")
         top_tabs.grid(row=0, column=0, padx=10, pady=(10, 4), sticky="ew")
         top_tabs.grid_columnconfigure((0, 1), weight=1)
@@ -933,23 +939,26 @@ class App(customtkinter.CTk):
         self.dashboard_switch_buttons = {}
         self.dashboard_switch_buttons["dashboard"] = customtkinter.CTkButton(
             top_tabs,
-            text="Dashboard",
+            text="◆ Dashboard",
             command=lambda: self._switch_dashboard_view("dashboard"),
-            fg_color=ACCENT_PURPLE,
-            hover_color="#30395e",
-            **button_style,
+            fg_color="#33407a",
+            hover_color="#3d4b8f",
+            **segment_button_style,
         )
         self.dashboard_switch_buttons["dashboard"].grid(row=0, column=0, padx=(0, 4), pady=(0, 6), sticky="ew")
         self.dashboard_switch_buttons["configurations"] = customtkinter.CTkButton(
             top_tabs,
-            text="Configurations",
+            text="◆ Configurations",
             command=lambda: self._switch_dashboard_view("configurations"),
-            fg_color=BG_CARD_ALT,
-            hover_color=BG_BORDER,
-            **button_style,
+            fg_color="#3d2e68",
+            hover_color="#4b397e",
+            **segment_button_style,
         )
         self.dashboard_switch_buttons["configurations"].grid(row=0, column=1, padx=(4, 0), pady=(0, 6), sticky="ew")
-
+        self._dashboard_inactive_colors = {
+            "dashboard": "#33407a",
+            "configurations": "#3d2e68",
+        }
         self.functional_views = customtkinter.CTkFrame(controls_panel, fg_color="transparent")
         self.functional_views.grid(row=1, column=0, padx=0, pady=0, sticky="nsew")
         self.functional_views.grid_columnconfigure(0, weight=1)
@@ -966,8 +975,9 @@ class App(customtkinter.CTk):
         customtkinter.CTkButton(quick, text="Select 4 accs", command=self._action_select_first_4, fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=0, padx=(0, 4), pady=3, sticky="ew")
 
         customtkinter.CTkButton(quick, text="Select all cs", command=self._action_select_all_toggle, fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=1, padx=(4, 0), pady=3, sticky="ew")
-        customtkinter.CTkButton(quick, text="Lunch selected", command=self._action_start_selected, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, **button_style).grid(row=1, column=0, columnspan=2, padx=0, pady=4, sticky="ew")
-        customtkinter.CTkButton(quick, text="Kill selected", command=self._action_kill_selected, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=2, column=0, columnspan=2, padx=0, pady=4, sticky="ew")
+
+        customtkinter.CTkButton(quick, text="Launch selected", command=self._action_start_selected, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, **button_style).grid(row=1, column=0, padx=(0, 4), pady=4, sticky="ew")
+        customtkinter.CTkButton(quick, text="Kill selected", command=self._action_kill_selected, fg_color=ACCENT_RED, hover_color="#962c38", **button_style).grid(row=1, column=1, padx=(4, 0), pady=4, sticky="ew")
 
         tools = customtkinter.CTkFrame(dashboard_view, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
         tools.grid(row=1, column=0, padx=10, pady=4, sticky="ew")
@@ -978,11 +988,14 @@ class App(customtkinter.CTk):
         tools_header = customtkinter.CTkFrame(tools, fg_color="transparent")
         tools_header.grid(row=0, column=0, padx=4, pady=(4, 2), sticky="ew")
         tools_header.grid_columnconfigure((0, 1), weight=1)
-        self.tools_switch_buttons["extra"] = customtkinter.CTkButton(tools_header, text="Extra tools", command=lambda: self._switch_tools_stack("tools", "extra"), fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style)
+        self.tools_switch_buttons["extra"] = customtkinter.CTkButton(tools_header, text="⚙ Extra tools", command=lambda: self._switch_tools_stack("tools", "extra"), fg_color="#34508a", hover_color="#3f5da3", **segment_button_style)
         self.tools_switch_buttons["extra"].grid(row=0, column=0, padx=(0, 4), pady=0, sticky="ew")
-        self.tools_switch_buttons["tools2"] = customtkinter.CTkButton(tools_header, text="tools 2", command=lambda: self._switch_tools_stack("tools", "tools2"), fg_color=BG_CARD_ALT, hover_color=BG_BORDER, **button_style)
+        self.tools_switch_buttons["tools2"] = customtkinter.CTkButton(tools_header, text="⚙ tools2", command=lambda: self._switch_tools_stack("tools", "tools2"), fg_color="#2f3a67", hover_color="#3b4a82", **segment_button_style)
         self.tools_switch_buttons["tools2"].grid(row=0, column=1, padx=(4, 0), pady=0, sticky="ew")
-
+        self._tools_inactive_colors = {
+            "extra": "#34508a",
+            "tools2": "#2f3a67",
+        }
         tools_stack = customtkinter.CTkFrame(tools, fg_color="transparent")
         tools_stack.grid(row=1, column=0, padx=0, pady=0, sticky="ew")
         tools_stack.grid_columnconfigure(0, weight=1)
@@ -1015,11 +1028,14 @@ class App(customtkinter.CTk):
         lobby_header.grid_columnconfigure((0, 1), weight=1)
 
         self.lobby_switch_buttons = {}
-        self.lobby_switch_buttons["lobby"] = customtkinter.CTkButton(lobby_header, text="Lobby managment", command=lambda: self._switch_tools_stack("lobby", "lobby"), fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style)
+        self.lobby_switch_buttons["lobby"] = customtkinter.CTkButton(lobby_header, text="♟ Lobby managment", command=lambda: self._switch_tools_stack("lobby", "lobby"), fg_color="#355b74", hover_color="#41708f", **segment_button_style)
         self.lobby_switch_buttons["lobby"].grid(row=0, column=0, padx=(0, 4), pady=0, sticky="ew")
-        self.lobby_switch_buttons["accs"] = customtkinter.CTkButton(lobby_header, text="tools accs", command=lambda: self._switch_tools_stack("lobby", "accs"), fg_color=BG_CARD_ALT, hover_color=BG_BORDER, **button_style)
+        self.lobby_switch_buttons["accs"] = customtkinter.CTkButton(lobby_header, text="♟ tools accs", command=lambda: self._switch_tools_stack("lobby", "accs"), fg_color="#314161", hover_color="#3d5279", **segment_button_style)
         self.lobby_switch_buttons["accs"].grid(row=0, column=1, padx=(4, 0), pady=0, sticky="ew")
-
+        self._lobby_inactive_colors = {
+            "lobby": "#355b74",
+            "accs": "#314161",
+        }
         lobby_stack = customtkinter.CTkFrame(lobby, fg_color="transparent")
         lobby_stack.grid(row=1, column=0, padx=0, pady=0, sticky="ew")
         lobby_stack.grid_columnconfigure(0, weight=1)
@@ -1061,10 +1077,20 @@ class App(customtkinter.CTk):
 
         config_header = customtkinter.CTkFrame(config_view, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
         config_header.grid(row=0, column=0, padx=10, pady=(0, 6), sticky="ew")
-        config_header.grid_columnconfigure((0, 1), weight=1)
-        customtkinter.CTkButton(config_header, text="Steam path", command=self._action_open_steam_path_popup, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, **button_style).grid(row=0, column=0, padx=6, pady=6, sticky="ew")
-        customtkinter.CTkButton(config_header, text="CS patch", command=self._action_open_cs2_path_popup, fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=0, column=1, padx=6, pady=6, sticky="ew")
+        config_header.grid_columnconfigure(0, weight=1)
+        config_header.grid_columnconfigure(1, weight=0)
+        customtkinter.CTkLabel(config_header, text="Steam path", text_color=TXT_SOFT, font=customtkinter.CTkFont(size=11, weight="bold")).grid(row=0, column=0, padx=8, pady=(8, 2), sticky="w")
+        self.config_steam_path_entry = customtkinter.CTkEntry(config_header, height=34)
+        self.config_steam_path_entry.grid(row=1, column=0, padx=8, pady=(0, 8), sticky="ew")
+        customtkinter.CTkButton(config_header, text="Save", command=self._action_save_steam_path, fg_color=ACCENT_BLUE, hover_color=ACCENT_BLUE_DARK, **button_style).grid(row=1, column=1, padx=(0, 8), pady=(0, 8), sticky="ew")
 
+        customtkinter.CTkLabel(config_header, text="CS2 path", text_color=TXT_SOFT, font=customtkinter.CTkFont(size=11, weight="bold")).grid(row=2, column=0, padx=8, pady=(6, 2), sticky="w")
+        self.config_cs2_path_entry = customtkinter.CTkEntry(config_header, height=34)
+        self.config_cs2_path_entry.grid(row=3, column=0, padx=8, pady=(0, 8), sticky="ew")
+        customtkinter.CTkButton(config_header, text="Save", command=self._action_save_cs2_path, fg_color=ACCENT_PURPLE, hover_color="#313866", **button_style).grid(row=3, column=1, padx=(0, 8), pady=(0, 8), sticky="ew")
+        self.config_steam_path_entry.insert(0, self.settings_manager.get("SteamPath", "") or "")
+        self.config_cs2_path_entry.insert(0, self.settings_manager.get("CS2Path", "") or "")
+        
         config_switches = customtkinter.CTkFrame(config_view, fg_color=BG_CARD_ALT, corner_radius=8, border_width=1, border_color=BG_BORDER)
         config_switches.grid(row=1, column=0, padx=10, pady=(0, 4), sticky="nsew")
         config_switches.grid_columnconfigure(0, weight=1)
@@ -1097,7 +1123,7 @@ class App(customtkinter.CTk):
             corner_radius=6,
             wrap="word",
             font=customtkinter.CTkFont(size=11),
-            height=118,
+            height=78,
         )
         self.logs_box.grid(row=5, column=0, padx=8, pady=(3, 6), sticky="nsew")
         self.log_manager.textbox = self.logs_box
@@ -1117,8 +1143,9 @@ class App(customtkinter.CTk):
 
         for key, button in getattr(self, "dashboard_switch_buttons", {}).items():
             is_active = key == view_name
+            inactive_color = getattr(self, "_dashboard_inactive_colors", {}).get(key, BG_CARD_ALT)
             button.configure(
-                fg_color=ACCENT_PURPLE if is_active else BG_CARD_ALT,
+                fg_color=ACCENT_PURPLE if is_active else inactive_color,
                 border_color="#4f5f8f" if is_active else "#2f3d63",
             )
 
@@ -1132,12 +1159,37 @@ class App(customtkinter.CTk):
             "tools": getattr(self, "tools_switch_buttons", {}),
             "lobby": getattr(self, "lobby_switch_buttons", {}),
         }.get(group_name, {})
+        inactive_colors = {
+            "tools": getattr(self, "_tools_inactive_colors", {}),
+            "lobby": getattr(self, "_lobby_inactive_colors", {}),
+        }.get(group_name, {})
         for key, button in buttons_map.items():
             is_active = key == section_name
             button.configure(
-                fg_color=ACCENT_PURPLE if is_active else BG_CARD_ALT,
+                fg_color=ACCENT_PURPLE if is_active else inactive_colors.get(key, BG_CARD_ALT),
                 border_color="#4f5f8f" if is_active else "#2f3d63",
             )
+    def _action_save_steam_path(self):
+        entry = getattr(self, "config_steam_path_entry", None)
+        if not entry:
+            return
+        new_path = entry.get().strip()
+        if not new_path:
+            self.log_manager.add_log("❌ Steam path пустой")
+            return
+        self.settings_manager.set("SteamPath", new_path)
+        self.log_manager.add_log("✅ Steam path сохранен")
+
+    def _action_save_cs2_path(self):
+        entry = getattr(self, "config_cs2_path_entry", None)
+        if not entry:
+            return
+        new_path = entry.get().strip()
+        if not new_path:
+            self.log_manager.add_log("❌ CS2 path пустой")
+            return
+        self.settings_manager.set("CS2Path", new_path)
+        self.log_manager.add_log("✅ CS2 path сохранен")
 
     def _action_open_steam_path_popup(self):
         current_path = self.settings_manager.get("SteamPath", "") or ""
@@ -1187,6 +1239,25 @@ class App(customtkinter.CTk):
         self._create_account_rows()
         self._safe_ui_refresh()
         self.log_manager.add_log(f"🔃 Accounts sorted by {metric}")
+
+    @staticmethod
+    def _build_login_source_index_map():
+        path = "logpass.txt"
+        index_map = {}
+        if not os.path.isfile(path):
+            return index_map
+        try:
+            with open(path, "r", encoding="utf-8", errors="replace") as file:
+                for line_number, raw_line in enumerate(file, start=1):
+                    line = (raw_line or "").strip()
+                    if not line:
+                        continue
+                    login = line.split(":", 1)[0].strip()
+                    if login and login not in index_map:
+                        index_map[login] = line_number
+        except Exception:
+            return {}
+        return index_map
     def _create_account_rows(self):
         scroll_pos = self._get_accounts_scroll_position()
         self.account_row_items.clear()
@@ -1194,6 +1265,7 @@ class App(customtkinter.CTk):
 
         levels_cache = self.levels_cache or {}
         levels_cache_lower = {str(k).lower(): v for k, v in levels_cache.items()}
+        source_index_map = self._build_login_source_index_map()
 
         for idx, account in enumerate(self.account_manager.accounts):
             row = customtkinter.CTkFrame(
@@ -1202,7 +1274,7 @@ class App(customtkinter.CTk):
                 corner_radius=8,
                 border_width=1,
                 border_color=BG_BORDER,
-                height=78,
+                height=62,
             )
             row.grid(row=idx, column=0, padx=4, pady=3, sticky="ew")
             row.grid_propagate(False)
@@ -1234,7 +1306,7 @@ class App(customtkinter.CTk):
 
             login_label = customtkinter.CTkLabel(
                 text_wrap,
-                text=account.login,
+                text=f"[{source_index_map.get(account.login, '?')}] {account.login}",
                 anchor="w",
                 text_color=TXT_MAIN,
                 font=customtkinter.CTkFont(size=12, weight="bold"),
@@ -1304,6 +1376,7 @@ class App(customtkinter.CTk):
                     "login_label": login_label,
                     "level_label": level_label,
                     "badge": badge,
+                    "source_index": source_index_map.get(account.login),
                     "ui_state": {
                         "login_color": None,
                         "level_text": None,
