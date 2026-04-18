@@ -1105,12 +1105,12 @@ class App(customtkinter.CTk):
         self._switch_dashboard_view("dashboard")
         self.accounts_info = customtkinter.CTkLabel(
             controls_panel,
-            text="0 accounts • 0 selected • 0 launched",
+            text="Accounts: - | Selected: - | Launched: -",
             text_color=TXT_MUTED,
             font=customtkinter.CTkFont(size=12, weight="bold"),
             anchor="w",
         )
-
+        self.accounts_info.grid(row=2, column=0, padx=10, pady=(4, 0), sticky="ew")
         self.accounts_scroll = customtkinter.CTkScrollableFrame(controls_panel, fg_color=BG_CARD_ALT, corner_radius=6, border_width=0)
         self.accounts_scroll.grid(row=3, column=0, padx=8, pady=(4, 6), sticky="nsew")
         self.accounts_scroll.grid_columnconfigure(0, weight=1)
@@ -1154,7 +1154,7 @@ class App(customtkinter.CTk):
             getattr(self, "accounts_scroll", None),
         ]
         hidden_widgets = [
-            getattr(self, "accounts_info", None),
+
             getattr(self, "logs_box", None),
         ]
         if view_name == "dashboard":
@@ -1712,7 +1712,9 @@ class App(customtkinter.CTk):
         selected = len(self.account_manager.selected_accounts)
         launched = self.account_manager.count_launched_accounts()
         if hasattr(self, "accounts_info"):
-            self.accounts_info.configure(text=f"{total} accounts • {selected} selected • {launched} launched")
+            self.accounts_info.configure(
+                text=f"Accounts: {total} | Selected: {selected} | Launched: {launched}"
+            )
 
     # ---------------- Config section ----------------
     def _build_config_section(self, parent):
