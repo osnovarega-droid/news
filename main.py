@@ -5,7 +5,7 @@ import customtkinter
 
 from Managers.GSIManager import GSIManager
 from Managers.VideoConfigManager import VideoConfigManager
-from ui.app import App
+from ui.unified_app import App
 
 
 APP_ICON_CANDIDATES = ("Icon2.ico", "Icon1.ico")
