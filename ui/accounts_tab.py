@@ -16,7 +16,7 @@ from Managers.SettingsManager import SettingsManager
 
 
 class AccountsControl(customtkinter.CTkTabview):
-    def __init__(self, parent, update_label, accounts_list):
+    def __init__(self, parent, update_label, accounts_list, render_ui=True):
         super().__init__(parent, width=250)
         self._active_stat_threads = 0
         self._stat_lock = threading.Lock()
@@ -29,17 +29,18 @@ class AccountsControl(customtkinter.CTkTabview):
         self.update_label = update_label
         self.accounts_list = accounts_list
         self.stat_buttons = []
-        self.grid(row=1, column=2, padx=(20, 0), pady=(0, 0), sticky="nsew")
+        if render_ui:
+            self.grid(row=1, column=2, padx=(20, 0), pady=(0, 0), sticky="nsew")
 
-        # Вкладки
-        self.add("Accounts Control")
-        self.tab("Accounts Control").grid_columnconfigure(0, weight=1)
+            # Вкладки
+            self.add("Accounts Control")
+            self.tab("Accounts Control").grid_columnconfigure(0, weight=1)
 
-        self.add("Account Stats")
-        self.tab("Account Stats").grid_columnconfigure(0, weight=1)
+            self.add("Account Stats")
+            self.tab("Account Stats").grid_columnconfigure(0, weight=1)
 
-        self.create_control_buttons()
-        self.create_stat_buttons()
+            self.create_control_buttons()
+            self.create_stat_buttons()
         
         self.accounts_list.set_control_frame(self)
         self.booster_processes = {}
