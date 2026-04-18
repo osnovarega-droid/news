@@ -12,11 +12,16 @@ from Managers.SettingsManager import SettingsManager
 
 
 class ConfigTab(customtkinter.CTkTabview):
-    def __init__(self, parent):
+    def __init__(self, parent, render_ui=True):
         super().__init__(parent, width=250)
         self._settingsManager = SettingsManager()
         self._logManager = LogManager()
         self.accountsManager = AccountManager()
+
+        self.bg_switch = None
+        self.overlay_switch = None
+        if not render_ui:
+            return
 
         self.grid(row=0, column=3, padx=(20, 20), pady=(0, 0), sticky="nsew")
         self.add("Config")
@@ -107,6 +112,8 @@ class ConfigTab(customtkinter.CTkTabview):
 
     def load_settings(self):
         """Load saved values from settingsManager and apply them."""
+        if not self.bg_switch or not self.overlay_switch:
+            return
         bg_value = self._settingsManager.get("RemoveBackground", False)
         if bg_value is not None:
             self.bg_switch.select() if bg_value else self.bg_switch.deselect()
