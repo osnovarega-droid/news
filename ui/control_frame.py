@@ -17,7 +17,7 @@ from Managers.SettingsManager import SettingsManager
 
 
 class ControlFrame(customtkinter.CTkFrame):
-    def __init__(self, parent):
+    def __init__(self, parent, render_ui=True):
         super().__init__(parent, width=250)
         self.logManager = LogManager()
         self._auto_move_lock = threading.Lock()
@@ -28,19 +28,20 @@ class ControlFrame(customtkinter.CTkFrame):
         self._dock_slot_padding = 1
         self.accounts_list_frame = None
 
-        self.grid(row=1, column=3, padx=(20, 20), pady=(20, 0), sticky="nsew")
+        if render_ui:
+            self.grid(row=1, column=3, padx=(20, 20), pady=(20, 0), sticky="nsew")
 
-        data = [
-            ("Move all CS windows", None, self.move_all_cs_windows),
-            ("Kill ALL CS & Steam processes", "red", self.kill_all_cs_and_steam),
-            ("Launch BES", "darkgreen", self.launch_bes),
-            ("Launch SRT", "darkgreen", self.launch_srt),
-            ("Support Developer", "darkgreen", self.sendCasesMe),
-        ]
+            data = [
+                ("Move all CS windows", None, self.move_all_cs_windows),
+                ("Kill ALL CS & Steam processes", "red", self.kill_all_cs_and_steam),
+                ("Launch BES", "darkgreen", self.launch_bes),
+                ("Launch SRT", "darkgreen", self.launch_srt),
+                ("Support Developer", "darkgreen", self.sendCasesMe),
+            ]
 
-        for text, color, func in data:
-            b = customtkinter.CTkButton(self, text=text, fg_color=color, command=func)
-            b.pack(pady=10)
+            for text, color, func in data:
+                b = customtkinter.CTkButton(self, text=text, fg_color=color, command=func)
+                b.pack(pady=10)
 
     def _load_runtime_maps(self):
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
